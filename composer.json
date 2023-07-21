@@ -1,0 +1,25 @@
+{
+  "name": "apollo29/csvdbadmin",
+  "description": "Admin tool for CSVDB.",
+  "type": "library",
+  "autoload": {
+    "psr-4": {
+      "CSVDBAdmin\\": "src/"
+    }
+  },
+  "require": {
+    "php": "^7.4 || ^8.0",
+    "apollo29/csvdb": "^0.1.0",
+    "vlucas/phpdotenv": "^4.1",
+    "ext-mbstring": "*",
+    "ext-json": "*",
+    "twig/twig": "^3.0"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Thomas D'Ascoli",
+      "email": "thomas@dasco.li"
+    }
+  ]
+}

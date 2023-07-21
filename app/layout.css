@@ -1,0 +1,12 @@
+#pma_navigation_content,
+#pma_navigation {
+    position: static;
+}
+
+#topmenucontainer {
+    padding-right: 0;
+}
+
+#page_content {
+    margin: auto;
+}
