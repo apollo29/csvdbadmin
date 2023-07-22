@@ -13,6 +13,11 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link text-nowrap" href="index.php?route=/server/sql">
+                    <img src="themes/dot.gif" title="SQL" alt="SQL" class="icon ic_b_sql">&nbsp;SQL
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link text-nowrap" href="index.php?route=/server/export">
                     <img src="themes/dot.gif" title="Exportieren" alt="Exportieren"
                          class="icon ic_b_export">&nbsp;Exportieren
@@ -22,12 +27,6 @@
                 <a class="nav-link text-nowrap" href="index.php?route=/server/import">
                     <img src="themes/dot.gif" title="Importieren" alt="Importieren"
                          class="icon ic_b_import">&nbsp;Importieren
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-nowrap" href="index.php?route=/preferences/manage">
-                    <img src="themes/dot.gif" title="Einstellungen" alt="Einstellungen"
-                         class="icon ic_b_tblops">&nbsp;Einstellungen
                 </a>
             </li>
         </ul>

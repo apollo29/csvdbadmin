@@ -1,14 +1,11 @@
 <?php
 
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
+use CSVDBAdmin\CSVDBAdmin;
 
 require_once '../vendor/autoload.php';
 
-$loader = new FilesystemLoader('templates');
-$twig = new Environment($loader);
-var_dump($_GET["route"]);
 $route = $_GET["route"];
+$admin = new CSVDBAdmin(__DIR__);
 ?>
 <html lang="en">
 <head>
@@ -26,9 +23,11 @@ $route = $_GET["route"];
             integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
             crossorigin="anonymous"></script>
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="themes/css/theme.css"/>
     <link rel="stylesheet" type="text/css" href="themes/jquery/jquery-ui.css"/>
-    <link rel="stylesheet" type="text/css" href="layout.css"/>
+    <link rel="stylesheet" type="text/css" href="themes/layout.css"/>
 </head>
 
 <body>
@@ -47,13 +46,9 @@ $route = $_GET["route"];
                         <a href="index.php?route=/" title="Startseite"><img src="themes/dot.gif" title="Startseite"
                                                                             alt="Startseite" class="icon ic_b_home"></a>
 
-                        <a href="#" title="CSVDBAdmin-Dokumentation" target="_blank"
+                        <a href="https://github.com/apollo29/csvdbadmin" title="CSVDBAdmin-Dokumentation" target="_blank"
                            rel="noopener noreferrer"><img src="themes/dot.gif" title="CSVDBAdmin-Dokumentation"
                                                           alt="CSVDBAdmin-Dokumentation" class="icon ic_b_docs"></a>
-
-                        <a id="pma_navigation_settings_icon" href="#" title="Navigationspanel-Einstellungen"><img
-                                    src="themes/dot.gif" title="Navigationspanel-Einstellungen"
-                                    alt="Navigationspanel-Einstellungen" class="icon ic_s_cog"></a>
 
                         <a id="pma_navigation_reload" href="#" title="Navigations-Panel aktualisieren"><img
                                     src="themes/dot.gif"
@@ -61,15 +56,10 @@ $route = $_GET["route"];
                                     alt="Navigations-Panel aktualisieren"
                                     class="icon ic_s_reload"></a>
                     </div>
-
-
-                    <img src="themes/dot.gif" title="Laden…" alt="Laden…" style="visibility: hidden; display:none"
-                         class="icon ic_ajax_clock_small throbber">
                 </div>
             </div>
 
             <div id="pma_navigation_tree" class="list_container synced highlight autoexpand mt-5">
-
                 <div id='pma_navigation_tree_content'>
                     <ul>
                         <li class="first new_database italics">
@@ -87,30 +77,24 @@ $route = $_GET["route"];
 
                             <div class="clearfloat"></div>
                         </li>
-
-
-                        <li class="database">
-                            <div class="block">
-                                <i></i>
-                                <b></b>
-                            </div>
-
-                            <div class="block second">
-                                <a href="index.php?route=/database/operations&db=bewegtunte_cntnd"><img
+                        <?php
+                        foreach ($admin->databases() as $database => $csvdb) {
+                            $icon = "ic_s_db";
+                            if (!$csvdb->hasConfig()) {
+                                $icon = "ic_b_engine";
+                            }
+                            echo '<li>' . "\n";
+                            echo '<div class="block"><i></i><b></b></div>' . "\n";
+                            echo '<div class="block second"><a href="index.php?route=/database/structure&db=' . $database . '"><img
                                             src="themes/dot.gif"
-                                            title="Datenbank-Operationen"
-                                            alt="Datenbank-Operationen"
-                                            class="icon ic_s_db"></a>
-                            </div>
-
-                            <a class="hover_show_full" href="index.php?route=/database/structure&db=bewegtunte_cntnd"
-                               title="Struktur">bewegtunte_cntnd</a>
-
-
-                            <div class="clearfloat"></div>
-
-                        </li>
-
+                                            title="Datenbank-Konfiguration"
+                                            alt="Datenbank-Konfiguration"
+                                            class="icon ' . $icon . '"></a></div>' . "\n";
+                            echo '<a class="hover_show_full" href="index.php?route=/database/list&db=' . $database . '" title="Struktur">' . $database . '</a>' . "\n";
+                            echo '<div class="clearfloat"></div>' . "\n";
+                            echo '</li>' . "\n";
+                        }
+                        ?>
                         <li class="navGroup">
                             <div class="block">
                                 <i></i>
@@ -195,28 +179,6 @@ $route = $_GET["route"];
                             </div>
 
                         </li>
-                        <li class="database">
-                            <div class="block">
-                                <i></i>
-                                <b></b>
-                            </div>
-
-                            <div class="block second">
-                                <a href="index.php?route=/database/operations&db=bewegtunte_cntnd"><img
-                                            src="themes/dot.gif"
-                                            title="Datenbank-Operationen"
-                                            alt="Datenbank-Operationen"
-                                            class="icon ic_b_engine"></a>
-                            </div>
-
-                            <a class="hover_show_full" href="index.php?route=/database/structure&db=bewegtunte_cntnd"
-                               title="Struktur">bewegtunte_cntnd</a>
-
-
-                            <div class="clearfloat"></div>
-
-
-                        </li>
                         <li class="last database">
                             <div class="block">
                                 <i></i>
@@ -237,7 +199,6 @@ $route = $_GET["route"];
 
 
                         </li>
-
                     </ul>
                 </div>
             </div>
@@ -251,24 +212,40 @@ $route = $_GET["route"];
             <nav id="server-breadcrumb" aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-navbar">
                     <li class="breadcrumb-item">
-                        <img src="themes/dot.gif" title="" alt="" class="icon ic_s_host">
-                        <a href="index.php?route=/" data-raw-text="127.0.0.1" draggable="false">
+                        <img src="themes/dot.gif" title="root" alt="root" class="icon ic_s_host">
+                        <a href="index.php?route=/">
                             Server: 127.0.0.1
                         </a>
                     </li>
-
+                    <?php
+                    if (isset($_GET['db'])) {
+                        echo '<li class="breadcrumb-item">
+                                <img src="themes/dot.gif" title="" alt="" class="icon ic_s_db">
+                                <a href="index.php?route=/database/list&db=' . $_GET['db'] . '">
+                                    Datenbank: ' . $_GET['db'] . '
+                                </a>
+                             </li>';
+                    }
+                    ?>
                 </ol>
             </nav>
             <div id="topmenucontainer" class="menucontainer">
                 <?php
                 switch ($route) {
+                    case "/database/change":
+                    case "/database/configuration":
+                    case "/database/export":
+                    case "/database/import":
+                    case "/database/list":
+                    case "/database/search":
+                    case "/database/sql":
                     case "/database/structure":
-                        $menubar_template = "menubar/database.twig";
+                        $menubar_template = "templates/menubar/database.php";
                         break;
                     default:
-                        $menubar_template = "menubar/default.twig";
+                        $menubar_template = "templates/menubar/default.php";
                 }
-                echo $twig->render($menubar_template);
+                include $menubar_template;
                 ?>
             </div>
         </div>
@@ -277,13 +254,23 @@ $route = $_GET["route"];
             <div class="container-fluid my-3">
                 <?php
                 switch ($route) {
+                    case "/database/change":
+                    case "/database/configuration":
+                    case "/database/export":
+                    case "/database/import":
+                    case "/database/list":
+                    case "/database/search":
+                    case "/database/sql":
                     case "/database/structure":
-                        $content_template = "database.twig";
+                    case "/server/export":
+                    case "/server/import":
+                    case "/server/sql":
+                        $content_template = "templates" . $route . ".php";
                         break;
                     default:
-                        $content_template = "main.twig";
+                        $content_template = "templates/main.php";
                 }
-                echo $twig->render($content_template);
+                include $content_template;
                 ?>
             </div>
         </div>
