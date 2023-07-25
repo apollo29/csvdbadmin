@@ -28,13 +28,18 @@ $admin = new CSVDBAdmin(__DIR__);
     <link rel="stylesheet" type="text/css" href="themes/css/theme.css"/>
     <link rel="stylesheet" type="text/css" href="themes/jquery/jquery-ui.css"/>
     <link rel="stylesheet" type="text/css" href="themes/layout.css"/>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/styles/github.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js"></script>
+    <script src="script/main.js"></script>
 </head>
 
 <body>
 
 <div class="d-flex">
 
-    <div id="pma_navigation">
+    <div id="pma_navigation" class="d-print-none">
         <div id="pma_navigation_content">
             <div id="pma_navigation_header">
                 <div id="pmalogo">
@@ -46,7 +51,8 @@ $admin = new CSVDBAdmin(__DIR__);
                         <a href="index.php?route=/" title="Startseite"><img src="themes/dot.gif" title="Startseite"
                                                                             alt="Startseite" class="icon ic_b_home"></a>
 
-                        <a href="https://github.com/apollo29/csvdbadmin" title="CSVDBAdmin-Dokumentation" target="_blank"
+                        <a href="https://github.com/apollo29/csvdbadmin" title="CSVDBAdmin-Dokumentation"
+                           target="_blank"
                            rel="noopener noreferrer"><img src="themes/dot.gif" title="CSVDBAdmin-Dokumentation"
                                                           alt="CSVDBAdmin-Dokumentation" class="icon ic_b_docs"></a>
 

@@ -10,3 +10,28 @@
 #page_content {
     margin: auto;
 }
+
+#sqlquery {
+    height: 10rem !important;
+}
+
+.result_query .alert,
+.sqlOuter pre {
+    margin-bottom: 0;
+}
+.result_query .alert {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.sqlOuter code {
+    background-color: rgb(229, 229, 229);
+}
+#sqlqueryresultsouter code {
+    background-color: transparent;
+}
+.btn-pagination {
+    background-color: transparent;
+    border: none;
+    color: black;
+    padding: 6px;
+}

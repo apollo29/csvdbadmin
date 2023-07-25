@@ -63,7 +63,7 @@ class CSVDBData
      */
     private function csvSchema()
     {
-        if ($this->csvdb != null && $this->config != null && $this->schema != null) {
+        if ($this->csvdb != null && $this->schema != null) {
             $schemaJson = file_get_contents($this->schema);
             $schemaJson = json_decode($schemaJson, true);
             $this->csvdb->schema($schemaJson);

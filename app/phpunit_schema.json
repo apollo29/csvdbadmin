@@ -1,16 +1,18 @@
 {
-  "index": {
+  "id": {
     "type": "integer",
-    "constraint": "auto_increment"
+    "constraint": "primary"
   },
   "header1": {
-    "type": "string"
+    "type": "string",
+    "default": "rowX"
   },
   "header2": {
-    "type": "string"
+    "type": "string",
+    "constraint": "unique"
   },
   "header3": {
     "type": "integer",
-    "constraint": "unique"
+    "default": "current_timestamp"
   }
 }

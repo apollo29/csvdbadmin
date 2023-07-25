@@ -1,31 +1,9 @@
 <?php
-$data = $admin->database($_GET['db']);
 
-$schema = array();
-$config = $data->csvdb()->config;
-$types = $data->csvdb()->getDatatypes();
-$index = array_keys($types)[$config->index];
-foreach ($types as $field => $type) {
-    $constraint = "";
-    $nullable = false;
-    $extra = "";
-    if ($field == $index) {
-        $constraint = "PRIMARY";
-        if ($config->autoincrement) {
-            $extra = "AUTO_INCREMENT";
-        }
-    }
-    $schema[$field] = [
-        "type" => $type,
-        "encoding" => $config->encoding,
-        "default" => "",
-        "constraint" => $constraint,
-        "nullable" => $nullable,
-        "extra" => $extra
-    ];
-}
-// todo add constraints list
-//$schema = $data->csvdb()->schema->schema; // todo add function in csvdb ->schema() -> if no schema, generate from datatypes and constraints (no constraints list function necssary)
+use CSVDB\Enums\ConstraintEnum;
+
+$data = $admin->database($_GET['db']);
+$schema = $data->csvdb()->getSchema();
 ?>
 <div class="table-responsive-md">
     <table id="tablestructure" class="table table-light table-striped table-hover w-auto align-middle">
@@ -57,13 +35,14 @@ foreach ($types as $field => $type) {
                     <label for="checkbox_row_<?= $i ?>">
                         <?= $field ?>
                         <?php
-                        if ($structure["constraint"]=="PRIMARY") {
-                            echo '<img src="themes/dot.gif" title="Primärschlüssel" alt="Primärschlüssel"
+                        if (array_key_exists("constraint", $structure)) {
+                            if ($structure["constraint"] == ConstraintEnum::PRIMARY_KEY) {
+                                echo '<img src="themes/dot.gif" title="Primärschlüssel" alt="Primärschlüssel"
                              class="icon ic_b_primary">';
-                        }
-                        else if ($structure["constraint"]=="UNIQUE") {
-                            echo '<img src="themes/dot.gif" title="Index" alt="Index"
+                            } else if ($structure["constraint"] == ConstraintEnum::UNIQUE) {
+                                echo '<img src="themes/dot.gif" title="Index" alt="Index"
                              class="icon ic_bd_primary">';
+                            }
                         }
                         ?>
                     </label>
@@ -76,30 +55,33 @@ foreach ($types as $field => $type) {
                 <td><?= $structure["encoding"] ?></td>
                 <td>
                     <?php
-                    if ($structure["nullable"]) {
+                    if (array_key_exists("nullable", $structure) && $structure["nullable"]) {
                         echo "Ja";
-                    }
-                    else {
+                    } else {
                         echo "Nein";
                     }
                     ?>
                 </td>
                 <td class="text-nowrap">
                     <?php
-                    if (!empty($structure["default"])) {
+                    if (array_key_exists("default", $structure) && !empty($structure["default"])) {
                         echo $structure["default"];
-                    }
-                    else {
+                    } else {
                         echo "<em>kein(e)</em>";
                     }
                     ?>
                 </td>
-                <td class="text-nowrap"><?= $structure["extra"] ?></td>
+                <td class="text-nowrap"><?php
+                    if (array_key_exists("extra", $structure) && !empty($structure["extra"])) {
+                        echo $structure["extra"];
+                    }
+                    ?></td>
 
                 <td class="edit text-center d-print-none">
                     <a class="change_column_anchor ajax"
                        href="index.php?route=/table/structure/change&amp;db=annodomini&amp;table=game_set&amp;field=uid&amp;change_column=1">
-                        <span class="text-nowrap"><img src="themes/dot.gif" title="Umbenennen" alt="Umbenennen" class="icon ic_b_rename">&nbsp;Umbenennen</span>
+                        <span class="text-nowrap"><img src="themes/dot.gif" title="Umbenennen" alt="Umbenennen"
+                                                       class="icon ic_b_rename">&nbsp;Umbenennen</span>
                     </a>
                 </td>
 
