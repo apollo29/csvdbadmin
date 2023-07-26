@@ -11,21 +11,51 @@ $(document).ready(function () {
         document.forms["showAll"].submit();
     });
 
-    $(".jsPrintButton").click(function (){
+    $(".jsPrintButton").click(function () {
         window.print();
     });
 
     $(".requireConfirm").click(function () {
+        let url = $(this).data("route");
         $("#delete_row").dialog({
             modal: true,
             buttons: {
-                "OK": function() {
-                    $( this ).dialog( "close" );
+                "OK": function () {
+                    $(this).dialog("close");
+                    window.location.href = url;
                 },
-                "Abbrechen": function() {
-                    $( this ).dialog( "close" );
+                "Abbrechen": function () {
+                    $(this).dialog("close");
                 }
             }
+        });
+    });
+
+    function confirmDialog(success) {
+        var confirmdialog = $('#delete_row')
+            .dialog({
+                modal: true,
+                autoOpen: false,
+                buttons: {
+                    "OK": function () {
+                        success();
+                        $(this).dialog("close");
+                    },
+                    "Abbrechen": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+        return confirmdialog.dialog("open");
+    }
+
+    $('form[name="resultsForm"]').on('submit', function (e) {
+        e.preventDefault();
+        var form = this;
+
+        confirmDialog(function () {
+            form.submit();
         });
     });
 });

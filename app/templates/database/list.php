@@ -1,12 +1,14 @@
 <?php
 
+use League\Csv\InvalidArgument;
+
 $data = $admin->database($_GET['db']);
 
 if (!empty($_GET["id_rows"])) {
     foreach ($_GET["id_rows"] as $index) {
         try {
             $data->csvdb()->delete([$data->csvdb()->index => $index]);
-        } catch (\League\Csv\InvalidArgument|\League\Csv\Exception|Exception $e) {
+        } catch (InvalidArgument|\League\Csv\Exception|Exception $e) {
             // todo show error
             var_dump($e);
         }
@@ -125,7 +127,7 @@ include "list_navigation.php";
 
                     <td class="text-center d-print-none ajax">
                     <span class="text-nowrap">
-                        <a href="#" class="delete_row requireConfirm">
+                        <a href="#" class="delete_row requireConfirm" data-route="index.php?route=/database/list&db=<?= $_GET["db"] ?>&pos=<?= $pos ?>&limit=<?= $limit ?>&id_rows[]=<?= $item[$data->csvdb()->index] ?>">
                             <span class="text-nowrap">
                                 <img src="themes/dot.gif" title="Löschen" alt="Löschen" class="icon ic_b_drop">&nbsp;Löschen
                             </span>
@@ -153,7 +155,7 @@ include "list_navigation.php";
         <label for="checkall">Alle auswählen</label>
         <em class="with-selected">markierte:</em>
 
-        <button class="btn btn-link mult_submit" type="submit" name="action" value="delete" title="Löschen">
+        <button class="btn btn-link mult_submit" type="submit" name="action" value="delete" title="Löschen" data-route="">
             <span class="text-nowrap"><img src="themes/dot.gif" title="Löschen" alt="Löschen" class="icon ic_b_drop">&nbsp;Löschen</span>
         </button>
 
