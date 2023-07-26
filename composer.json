@@ -1,7 +1,7 @@
 {
   "name": "apollo29/csvdbadmin",
   "description": "Admin tool for CSVDB.",
-  "type": "library",
+  "type": "project",
   "autoload": {
     "psr-4": {
       "CSVDBAdmin\\": "src/"

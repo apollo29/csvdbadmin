@@ -188,6 +188,6 @@ include "list_navigation.php";
     </a>
 </fieldset>
 
-<div id="delete_row" title="Fortfahren">
+<div id="delete_row" title="Fortfahren" class="hide">
     <p>Möchten Sie diese Zeile(en) wirklich löschen?</p>
 </div>

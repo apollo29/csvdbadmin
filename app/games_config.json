@@ -1,9 +1,9 @@
 {
-  "index": 1,
-  "encoding": "UTF-8",
-  "delimiter": ";",
-  "headers": true,
-  "cache": false,
-  "history": false,
-  "autoincrement": false
+    "index": 1,
+    "encoding": "UTF-8",
+    "delimiter": ";",
+    "headers": true,
+    "cache": false,
+    "history": false,
+    "autoincrement": false
 }

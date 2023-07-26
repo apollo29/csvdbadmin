@@ -1,4 +1,7 @@
 <?php
+
+// todo sql syntax checker
+
 $sql_query = "SELECT * FROM " . $_GET["db"];
 if (!empty($_GET["sql_query"])) {
     $sql_query = $_GET["sql_query"];

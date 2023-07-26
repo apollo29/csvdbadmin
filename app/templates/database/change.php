@@ -22,6 +22,9 @@ function getInputType(string $type): string
 
 function getInputValue(string $type, string $value): string
 {
+    if (empty($value)) {
+        return $value;
+    }
     switch ($type) {
         case "date":
             return date("Y-m-t", strtotime($value));

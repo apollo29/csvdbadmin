@@ -75,8 +75,30 @@ class CSVDBData
         return !empty($this->config);
     }
 
+    public function configFile(): ?string
+    {
+        if ($this->hasConfig()) {
+            return $this->filename($this->config);
+        }
+        return null;
+    }
+
     public function hasSchema(): bool
     {
         return !empty($this->schema);
+    }
+
+    public function schemaFile(): ?string
+    {
+        if ($this->hasSchema()) {
+            return $this->filename($this->schema);
+        }
+        return null;
+    }
+
+    private function filename(string $file): string
+    {
+        $path_parts = pathinfo($file);
+        return $path_parts["basename"];
     }
 }
