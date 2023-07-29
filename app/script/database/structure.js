@@ -2,22 +2,16 @@ $(document).ready(function () {
     $(".rename_field").click(function () {
         $("#rename_field_value").val($(this).data("field"));
         $("#rename_field_name").val($(this).data("field"));
-        const modal = new bootstrap.Modal('#rename_field');
-        modal.show();
+        new bootstrap.Modal('#rename_field').show();
     });
 
-    $(".add_comment").click(function () {
-        $("#comment_value").val($(this).data("comment"));
-        $("#comment_field_name").val($(this).data("field"));
-        const modal = new bootstrap.Modal('#add_comment');
-        modal.show();
-    });
-
-    $(".add_default").click(function () {
-        $("#default_value").val($(this).data("default"));
-        $("#default_field_name").val($(this).data("field"));
-        const modal = new bootstrap.Modal('#default_value');
-        modal.show();
+    $(".requireInput").click(function () {
+        console.log($(this).data("field"), $(this).data("field-value"), $(this).data("title"));
+        $("#field_value").val($(this).data("field-value"));
+        $("#field_name").val($(this).data("field"));
+        $("#field_action").val($(this).data("action"));
+        $("#requireInput .modal_title").append($(this).data("title"));
+        new bootstrap.Modal('#requireInput').show();
     });
 
     $(".requireConfirm").click(function () {

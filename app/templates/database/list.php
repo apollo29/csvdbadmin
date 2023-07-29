@@ -27,9 +27,10 @@ if ($_POST) {
         $where = "";
         for ($i = 0; $i < count($_POST["criteriaValues"]); $i++) {
             $value = $_POST["criteriaValues"][$i];
+            $operator = $_POST["criteriaColumnOperators"][$i];
+            // todo operator "IS NULL"
             if (!empty($value)) {
                 $name = $_POST["criteriaColumnNames"][$i];
-                $operator = $_POST["criteriaColumnOperators"][$i];
                 $type = $_POST["criteriaColumnTypes"][$i];
                 if ($type == "string") {
                     if ($operator == "LIKE %...%") {
@@ -92,9 +93,9 @@ if (isset($_GET["showAll"]) && $_GET["showAll"] == "all") {
         <pre><code class="language-sql"><?= $sql_query ?></code></pre>
     </div>
     <div class="tools d-print-none">
-        [&nbsp;<a href="index.php?route=/database/sql&db=<?= $_GET["db"] ?>&sql_query<?= $sql_query ?>">Bearbeiten</a>&nbsp;]
+        [&nbsp;<a href="index.php?route=/database/sql&db=<?= $_GET["db"] ?>&sql_query=<?= $sql_query ?>">Bearbeiten</a>&nbsp;]
         [&nbsp;<a
-                href="index.php?route=/database/list&db=<?= $_GET["db"] ?>&sql_query<?= $sql_query ?>&pos=<?= $pos ?>&limit=<?= $limit ?>">Aktualisieren</a>&nbsp;]
+                href="index.php?route=/database/list&db=<?= $_GET["db"] ?>&sql_query=<?= $sql_query ?>&pos=<?= $pos ?>&limit=<?= $limit ?>">Aktualisieren</a>&nbsp;]
     </div>
 </div>
 <!-- DATABASE NAVIGATION -->

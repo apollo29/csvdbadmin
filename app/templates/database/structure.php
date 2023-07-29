@@ -1,18 +1,41 @@
 <?php
 
 use CSVDB\Enums\ConstraintEnum;
+use League\Csv\InvalidArgument;
 
-$data = $admin->database($_GET['db']);
-$schema = $data->csvdb()->getSchema();
+// todo rename, remove constraint
 
 if (!empty($_GET["delete_constraint"])) {
     var_dump($_GET);
-    // todo this is change in the schema!
+    try {
+        $admin->remove_constraint($_GET["delete_constraint"], $_GET["db"]);
+    } catch (Exception $e) {
+        // todo
+    }
 }
 if (!empty($_GET["rename_field"])) {
     var_dump($_GET);
     // todo this is change in the schema!
+
 }
+if (!empty($_GET["action"])) {
+    var_dump($_GET);
+    try {
+        $admin->add_constraint($_GET["field_name"], $_GET["action"], $_GET["field_value"], $_GET["db"]);
+    } catch (InvalidArgument|\League\Csv\Exception|Exception $e) {
+        // todo
+    }
+}
+if (!empty($_GET["add_unique"])) {
+    try {
+        $admin->constraint($_GET["add_unique"], $_GET["db"]);
+    } catch (InvalidArgument|\League\Csv\Exception|Exception $e) {
+        // todo
+    }
+}
+
+$data = $admin->database($_GET['db']);
+$schema = $data->csvdb()->getSchema();
 ?>
 <script src="script/database/structure.js"></script>
 <div class="table-responsive-md">
@@ -108,43 +131,42 @@ if (!empty($_GET["rename_field"])) {
                                 data-bs-toggle="dropdown" aria-expanded="false">Mehr
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreActionsButton">
-                            <li class="add_primary primary text-nowrap">
-                                <a rel="samepage"
-                                   class="dropdown-item add_primary d-print-none add_unique_anchor <?= (array_key_exists("constraint", $structure) && $structure["constraint"] == "primary") ? "disabled" : "" ?>"
-                                   href="index.php?route=/database/structure&db=<?= $_GET["db"] ?>&add-primary=<?= $field ?>">
-                                    <span class="text-nowrap"><img src="themes/dot.gif" title="Primärschlüssel"
-                                                                   alt="Primärschlüssel"
-                                                                   class="icon ic_bd_primary">&nbsp;Primärschlüssel</span>
-                                </a>
-                            </li>
 
                             <li class="add_unique unique text-nowrap">
                                 <a rel="samepage"
                                    class="dropdown-item add_unique d-print-none add_unique_anchor <?= (array_key_exists("constraint", $structure) && ($structure["constraint"] == "unique" || $structure["constraint"] == "primary")) ? "disabled" : "" ?>"
-                                   href="index.php?route=/database/structure&db=<?= $_GET["db"] ?>&add-key=<?= $field ?>"
-                                   data-post="db=annodomini&amp;table=game_set&amp;sql_query=ALTER+TABLE+%60game_set%60+ADD+UNIQUE%28%60uid%60%29%3B&amp;message_to_show=Ein+Index+wurde+in+uid+erzeugt.">
+                                   href="index.php?route=/database/structure&db=<?= $_GET["db"] ?>&add_unique=<?= $field ?>">
                                     <span class="text-nowrap"><img src="themes/dot.gif" title="Unique" alt="Unique"
                                                                    class="icon ic_b_unique">&nbsp;Unique</span>
                                 </a>
                             </li>
 
                             <li class="add_nullable nullable text-nowrap">
-                                <a rel="samepage" class="dropdown-item add_nullable d-print-none"
-                                   href="index.php?route=/database/structure&db=<?= $_GET["db"] ?>&toggle-nullable=<?= $field ?>">
+                                <!-- currently disabled -->
+                                <a rel="samepage" class="disabled dropdown-item add_nullable d-print-none"
+                                   href="index.php?route=/database/structure&db=<?= $_GET["db"] ?>&toggle_nullable=<?= $field ?>">
                                     <span class="text-nowrap"><img src="themes/dot.gif" title="Nullable" alt="Nullable"
                                                                    class="icon ic_b_help">&nbsp;Nullable</span>
                                 </a>
                             </li>
 
                             <li class="add_default default text-nowrap">
-                                <a rel="samepage" class="dropdown-item add_default d-print-none" href="#" data-field="<?= $field ?>" data-default="<?= (array_key_exists("default", $structure) && !empty($structure["default"])) ? $structure["default"] : "" ?>">
+                                <a rel="samepage" class="dropdown-item requireInput d-print-none" href="#"
+                                   data-field="<?= $field ?>"
+                                   data-field-value="<?= (array_key_exists("default", $structure) && !empty($structure["default"])) ? $structure["default"] : "" ?>"
+                                   data-title="Standard-Wert"
+                                   data-action="default">
                                     <span class="text-nowrap"><img src="themes/dot.gif" title="Standard" alt="Standard"
                                                                    class="icon ic_b_comment">&nbsp;Standard</span>
                                 </a>
                             </li>
 
                             <li class="add_comment comment text-nowrap">
-                                <a rel="samepage" class="dropdown-item add_comment d-print-none" href="#" data-field="<?= $field ?>" data-comment="<?= (array_key_exists("comment", $structure) && !empty($structure["comment"])) ? $structure["comment"] : "" ?>">
+                                <a rel="samepage" class="dropdown-item requireInput d-print-none" href="#"
+                                   data-field="<?= $field ?>"
+                                   data-field-value="<?= (array_key_exists("comment", $structure) && !empty($structure["comment"])) ? $structure["comment"] : "" ?>"
+                                   data-title="Kommentar"
+                                   data-action="comment">
                                     <span class="text-nowrap"><img src="themes/dot.gif" title="Comment" alt="Comment"
                                                                    class="icon ic_b_comment">&nbsp;Comment</span>
                                 </a>
@@ -250,67 +272,31 @@ if (!empty($_GET["rename_field"])) {
     </div>
 </div>
 
-<div class="modal" tabindex="-1" id="add_comment">
+<div class="modal" tabindex="-1" id="requireInput">
     <div class="modal-dialog">
         <div class="modal-content">
             <form>
                 <div class="modal-header">
-                    <h5 class="modal-title">Kommentar hinzufügen</h5>
+                    <h5 class="modal-title"><span class="modal_title"></span> hinzufügen</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schliessen"></button>
                 </div>
                 <div class="modal-body">
-                    <fieldset class="pma-fieldset" id="index_edit_fields">
+                    <fieldset class="pma-fieldset">
                         <div class="index_info">
-                            <div>
-                                <div class="label">
-                                    <strong>
-                                        <label for="input_name">Kommentar:</label>
-                                    </strong>
-                                </div>
-                                <input type="text" name="comment" id="comment_value" class="w-100"/>
+                            <div class="label">
+                                <strong>
+                                    <label for="field_value"><span class="modal_title"></span>:</label>
+                                </strong>
                             </div>
+                            <input type="text" name="field_value" id="field_value" class="w-100"/>
                         </div>
                     </fieldset>
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="route" value="/database/structure">
                     <input type="hidden" name="db" value="<?= $_GET["db"] ?>">
-                    <input type="hidden" name="comment_field" id="comment_field_name">
-
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
-                    <button type="submit" class="btn btn-primary">OK</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal" tabindex="-1" id="default_value">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form>
-                <div class="modal-header">
-                    <h5 class="modal-title">Standard-Wert hinzufügen</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Schliessen"></button>
-                </div>
-                <div class="modal-body">
-                    <fieldset class="pma-fieldset" id="index_edit_fields">
-                        <div class="index_info">
-                            <div>
-                                <div class="label">
-                                    <strong>
-                                        <label for="input_name">Standard-Wert:</label>
-                                    </strong>
-                                </div>
-                                <input type="text" name="default" id="default_value" class="w-100"/>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-                <div class="modal-footer">
-                    <input type="hidden" name="route" value="/database/structure">
-                    <input type="hidden" name="db" value="<?= $_GET["db"] ?>">
-                    <input type="hidden" name="default_field" id="default_field_name">
+                    <input type="hidden" name="field_name" id="field_name">
+                    <input type="hidden" name="action" id="field_action">
 
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
                     <button type="submit" class="btn btn-primary">OK</button>

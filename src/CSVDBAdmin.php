@@ -4,6 +4,7 @@ namespace CSVDBAdmin;
 
 use CSVDB\Helpers\CSVConfig;
 use CSVDB\Helpers\CSVUtilities;
+use League\Csv\Exception;
 
 class CSVDBAdmin
 {
@@ -80,7 +81,8 @@ class CSVDBAdmin
         }
     }
 
-    public function deleteConfig($database) {
+    public function deleteConfig($database)
+    {
         $file = $this->basedir . "/" . $database . "_config.json";
         $result = unlink($file);
         if ($result) {
@@ -116,7 +118,8 @@ class CSVDBAdmin
         }
     }
 
-    public function deleteSchema($database) {
+    public function deleteSchema($database)
+    {
         $file = $this->basedir . "/" . $database . "_schema.json";
         $result = unlink($file);
         if ($result) {
@@ -130,5 +133,42 @@ class CSVDBAdmin
     {
         json_decode($json);
         return json_last_error() === JSON_ERROR_NONE;
+    }
+
+    // constraints
+
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
+    public function constraint(string $constraint, string $database)
+    {
+        $data = $this->database($database);
+        $data->csvdb()->unique($constraint);
+        $this->storeSchema(json_encode($data->csvdb()->getSchema()), $database);
+    }
+
+    /**
+     * @throws Exception
+     * @throws \Exception
+     */
+    public function add_constraint(string $field, string $constraint, string $value, string $database)
+    {
+        $data = $this->database($database);
+        $schema = $data->csvdb()->getSchema();
+        $schema[$field][$constraint] = $value;
+        $this->storeSchema(json_encode($schema, JSON_PRETTY_PRINT), $database);
+    }
+
+
+    /**
+     * @throws \Exception
+     */
+    public function remove_constraint(string $constraint, string $database)
+    {
+        $data = $this->database($database);
+        var_dump($data->csvdb()->constraints());
+        $data->csvdb()->remove_unique($constraint);
+        $this->storeSchema(json_encode($data->csvdb()->getSchema(), JSON_PRETTY_PRINT), $database);
     }
 }

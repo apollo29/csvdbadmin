@@ -1,18 +1,23 @@
 {
-  "id": {
-    "type": "integer",
-    "constraint": "primary"
-  },
-  "header1": {
-    "type": "string",
-    "default": "rowX"
-  },
-  "header2": {
-    "type": "string",
-    "constraint": "unique"
-  },
-  "header3": {
-    "type": "integer",
-    "default": "current_timestamp"
-  }
+    "id": {
+        "type": "integer",
+        "constraint": "primary",
+        "encoding": "UTF-8"
+    },
+    "header1": {
+        "type": "string",
+        "default": "rowX",
+        "encoding": "UTF-8"
+    },
+    "header2": {
+        "type": "string",
+        "constraint": "unique",
+        "encoding": "UTF-8",
+        "comment": "Test"
+    },
+    "header3": {
+        "type": "integer",
+        "default": "current_timestamp",
+        "encoding": "UTF-8"
+    }
 }
