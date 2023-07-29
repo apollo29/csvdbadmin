@@ -1,25 +1,21 @@
 <?php
 
-// todo sql syntax checker
+// todo sql syntax checker und highlighter --> ACE
 
 $sql_query = "SELECT * FROM " . $_GET["db"];
 if (!empty($_GET["sql_query"])) {
     $sql_query = $_GET["sql_query"];
 }
 ?>
+<script src="script/database/sql.js"></script>
 <div class="card mb-3">
     <div class="card-header">
         SQL-Befehl(e) in Datenbank <a
                 href="index.php?route=/database/list&amp;db=<?= $_GET["db"] ?>"><?= $_GET["db"] ?></a> ausführen:
     </div>
-    <div class="card-body">
-        <div id="queryfieldscontainer">
-            <div class="mb-3">
-                <textarea class="form-control" tabindex="100" name="sql_query" id="sqlquery" cols="20" rows="5"
-                          aria-label="SQL-Befehl"><?= $sql_query ?></textarea>
-            </div>
-        </div>
-
+    <div>
+        <div id="editor" class="sql-editor"><?= $sql_query ?></div>
+        <textarea class="hide" name="sql_query" id="sql_query"><?= $sql_query ?></textarea>
     </div>
     <div class="card-footer">
         <input class="btn btn-primary ms-1" type="submit" id="button_submit_query" name="SQL" tabindex="200" value="OK">

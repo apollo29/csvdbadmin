@@ -23,16 +23,20 @@
 .sqlOuter pre {
     margin-bottom: 0;
 }
+
 .result_query .alert {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
+
 .sqlOuter code {
     background-color: rgb(229, 229, 229);
 }
+
 #sqlqueryresultsouter code {
     background-color: transparent;
 }
+
 .btn-pagination {
     background-color: transparent;
     border: none;
@@ -40,6 +44,23 @@
     padding: 6px;
 }
 
+.editor {
+    height: 25rem;
+}
+
+.sql-editor {
+    height: 10rem;
+}
+
 .w-fit-content {
     width: fit-content;
+}
+
+.pma-fieldset {
+    border-radius: 4px;
+}
+
+a.disabled {
+    color: #adb5bd;
+    pointer-events: none;
 }

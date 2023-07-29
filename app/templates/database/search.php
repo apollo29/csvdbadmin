@@ -1,14 +1,21 @@
 <?php
 $data = $admin->database($_GET['db']);
 $types = $data->csvdb()->getDatatypes();
-?>
-<form method="post" action="index.php?route=/table/search" name="insertForm" id="tbl_search_form" class="ajax lock-page">
-    <input type="hidden" name="db" value="annodomini_dev">
-    <input type="hidden" name="table" value="account">
-    <input type="hidden" name="token" value="664b4d377a2930443f4b7b2a374d4c27">
-    <input type="hidden" name="goto" value="">
-    <input type="hidden" name="back" value="index.php?route=/table/search">
 
+function getInputType(string $type): string
+{
+    switch ($type) {
+        case "integer":
+            return "number";
+        case "date":
+        case "time":
+            return $type;
+        default:
+            return "text";
+    }
+}
+?>
+<form method="post" action="index.php?route=/database/list&db=<?= $_GET["db"] ?>" name="insertForm" id="tbl_search_form" class="ajax lock-page">
     <div class="card">
         <div class="card-header">Suche über Abfrage-durch-Beispiel ("query by example") (Platzhalter: "%")</div>
 
@@ -27,39 +34,36 @@ $types = $data->csvdb()->getDatatypes();
                         <tbody>
 
                         <?php
-                        $i=0;
+                        $i = 0;
                         foreach ($types as $field => $type) {
-                        ?>
-                        <tr class="noclick">
-                            <th><?= $field ?></th>
-                            <td dir="ltr">
-                                <?= $type ?>
-                            </td>
-                            <td>
-                                <select class="column-operator" id="ColumnOperator<?= $i ?>" name="criteriaColumnOperators[<?= $i ?>]">
-                                    <option value="=">=</option>
-                                    <option value=">">&gt;</option>
-                                    <option value=">=">&gt;=</option>
-                                    <option value="<">&lt;</option>
-                                    <option value="<=">&lt;=</option>
-                                    <option value="!=">!=</option>
-                                    <option value="LIKE">LIKE</option>
-                                    <option value="LIKE %...%">LIKE %...%</option>
-                                    <option value="NOT LIKE">NOT LIKE</option>
-                                    <option value="NOT LIKE %...%">NOT LIKE %...%</option>
-                                    <option value="IS NULL">IS NULL</option>
-                                    <option value="IS NOT NULL">IS NOT NULL</option>
-                                </select>
+                            ?>
+                            <tr class="noclick">
+                                <th><?= $field ?></th>
+                                <td dir="ltr">
+                                    <?= $type ?>
+                                </td>
+                                <td>
+                                    <select class="column-operator" id="ColumnOperator<?= $i ?>"
+                                            name="criteriaColumnOperators[<?= $i ?>]">
+                                        <option value="=">=</option>
+                                        <option value="!=">!=</option>
+                                        <option value="LIKE" <?= ($type == "string") ? 'selected="selected"' : "" ?>>
+                                            LIKE
+                                        </option>
+                                        <option value="LIKE %...%">LIKE %...%</option>
+                                        <option value="IS NULL">IS NULL</option>
+                                    </select>
 
-                            </td>
-                            <td data-type="<?= $type ?>">
-                                <input type="text" name="criteriaValues[<?= $i ?>]" size="40" class="textfield" id="fieldID_<?= $i ?>">
-
-                                <input type="hidden" name="criteriaColumnNames[<?= $i ?>]" value="<?= $field ?>">
-                                <input type="hidden" name="criteriaColumnTypes[<?= $i ?>]" value="<?= $type ?>">
-                            </td>
-                        </tr>
-                        <?php
+                                </td>
+                                <td data-type="<?= $type ?>">
+                                    <input type="<?= getInputType($type) ?>" name="criteriaValues[<?= $i ?>]" size="40"
+                                           class="textfield" id="fieldID_<?= $i ?>">
+                                    <input type="hidden" name="criteriaColumnNames[<?= $i ?>]" value="<?= $field ?>">
+                                    <input type="hidden" name="criteriaColumnTypes[<?= $i ?>]" value="<?= $type ?>">
+                                    <input type="hidden" name="action" value="search">
+                                </td>
+                            </tr>
+                            <?php
                             $i++;
                         }
                         ?>

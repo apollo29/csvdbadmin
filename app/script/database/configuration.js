@@ -14,4 +14,11 @@ $(document).ready(function () {
             }
         });
     });
+
+    var aceEditor = ace.edit("editor");
+    aceEditor.session.setMode("ace/mode/json");
+    var textarea = $('textarea[name="schema"]');
+    aceEditor.session.on("change", function () {
+        textarea.val(aceEditor.session.getValue());
+    });
 });

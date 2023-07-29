@@ -22,6 +22,38 @@ if (!empty($_GET["sql_query"])) {
     $sql_query = $_GET["sql_query"];
 }
 
+if ($_POST) {
+    if (!empty($_POST["action"]) && $_POST["action"] == "search") {
+        $where = "";
+        for ($i = 0; $i < count($_POST["criteriaValues"]); $i++) {
+            $value = $_POST["criteriaValues"][$i];
+            if (!empty($value)) {
+                $name = $_POST["criteriaColumnNames"][$i];
+                $operator = $_POST["criteriaColumnOperators"][$i];
+                $type = $_POST["criteriaColumnTypes"][$i];
+                if ($type == "string") {
+                    if ($operator == "LIKE %...%") {
+                        $value = "'%" . $value . "%'";
+                    } else {
+                        $value = "'" . $value . "'";
+                    }
+                }
+                if ($operator == "LIKE %...%") {
+                    $operator = "LIKE";
+                }
+                if (!empty($where)) {
+                    $where .= " AND";
+                }
+                $where .= " $name $operator $value";
+            }
+        }
+
+        if (!empty($where)) {
+            $sql_query = "SELECT * FROM " . $_GET["db"] . " WHERE" . $where;
+        }
+    }
+}
+
 $pos = 0;
 if (!empty($_GET["pos"])) {
     $pos = (int)$_GET["pos"];
@@ -61,7 +93,8 @@ if (isset($_GET["showAll"]) && $_GET["showAll"] == "all") {
     </div>
     <div class="tools d-print-none">
         [&nbsp;<a href="index.php?route=/database/sql&db=<?= $_GET["db"] ?>&sql_query<?= $sql_query ?>">Bearbeiten</a>&nbsp;]
-        [&nbsp;<a href="index.php?route=/database/list&db=<?= $_GET["db"] ?>&sql_query<?= $sql_query ?>&pos=<?= $pos ?>&limit=<?= $limit ?>">Aktualisieren</a>&nbsp;]
+        [&nbsp;<a
+                href="index.php?route=/database/list&db=<?= $_GET["db"] ?>&sql_query<?= $sql_query ?>&pos=<?= $pos ?>&limit=<?= $limit ?>">Aktualisieren</a>&nbsp;]
     </div>
 </div>
 <!-- DATABASE NAVIGATION -->
@@ -127,7 +160,8 @@ include "list_navigation.php";
 
                     <td class="text-center d-print-none ajax">
                     <span class="text-nowrap">
-                        <a href="#" class="delete_row requireConfirm" data-route="index.php?route=/database/list&db=<?= $_GET["db"] ?>&pos=<?= $pos ?>&limit=<?= $limit ?>&id_rows[]=<?= $item[$data->csvdb()->index] ?>">
+                        <a href="#" class="delete_row requireConfirm"
+                           data-route="index.php?route=/database/list&db=<?= $_GET["db"] ?>&pos=<?= $pos ?>&limit=<?= $limit ?>&id_rows[]=<?= $item[$data->csvdb()->index] ?>">
                             <span class="text-nowrap">
                                 <img src="themes/dot.gif" title="Löschen" alt="Löschen" class="icon ic_b_drop">&nbsp;Löschen
                             </span>
@@ -155,7 +189,8 @@ include "list_navigation.php";
         <label for="checkall">Alle auswählen</label>
         <em class="with-selected">markierte:</em>
 
-        <button class="btn btn-link mult_submit" type="submit" name="action" value="delete" title="Löschen" data-route="">
+        <button class="btn btn-link mult_submit" type="submit" name="action" value="delete" title="Löschen"
+                data-route="">
             <span class="text-nowrap"><img src="themes/dot.gif" title="Löschen" alt="Löschen" class="icon ic_b_drop">&nbsp;Löschen</span>
         </button>
 
@@ -175,17 +210,19 @@ include "list_navigation.php";
 <fieldset class="pma-fieldset d-print-none">
     <legend>Operationen für das Abfrageergebnis</legend>
 
-    <button type="button" class="btn btn-link jsPrintButton">
+    <div>
+        <button type="button" class="btn btn-link jsPrintButton">
         <span class="text-nowrap">
             <img src="themes/dot.gif" title="Drucken" alt="Drucken" class="icon ic_b_print">&nbsp;Drucken
         </span>
-    </button>
+        </button>
 
-    <a href="index.php?route=/database/export&db=<?= $_GET["db"] ?>&sql_query=<?= $sql_query ?>" class="btn">
+        <a href="index.php?route=/database/export&db=<?= $_GET["db"] ?>&sql_query=<?= $sql_query ?>" class="btn">
         <span class="text-nowrap">
             <img src="themes/dot.gif" title="Exportieren" alt="Exportieren" class="icon ic_b_tblexport">&nbsp;Exportieren
         </span>
-    </a>
+        </a>
+    </div>
 </fieldset>
 
 <div id="delete_row" title="Fortfahren" class="hide">

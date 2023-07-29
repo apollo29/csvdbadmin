@@ -2,8 +2,6 @@
 
 use CSVDB\Helpers\CSVConfig;
 
-// todo json syntax checker
-
 if ($_POST) {
     if (array_key_exists("action", $_POST)) {
         if ($_POST["action"] == "config") {
@@ -205,15 +203,9 @@ $config = $data->csvdb()->config;
                 <div class="card-header">
                     <?= $data->hasSchema() ? $data->schemaFile() : 'Kein Schema; default Werte' ?>
                 </div>
-                <div class="card-body">
-                    <div id="schemacontainer">
-                        <div class="mb-3">
-                            <textarea class="form-control" name="schema" id="schema" cols="20" rows="15"
-                                      aria-label="Schema">
-<?= json_encode($data->csvdb()->getSchema(), JSON_PRETTY_PRINT) ?>
-                            </textarea>
-                        </div>
-                    </div>
+                <div>
+                    <div id="editor" class="editor"><?= json_encode($data->csvdb()->getSchema(), JSON_PRETTY_PRINT) ?></div>
+                    <textarea class="hide" name="schema" id="schema"><?= json_encode($data->csvdb()->getSchema(), JSON_PRETTY_PRINT) ?></textarea>
                 </div>
                 <div class="card-footer d-flex">
                     <div>
