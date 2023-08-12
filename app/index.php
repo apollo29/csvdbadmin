@@ -246,6 +246,7 @@ $admin = new CSVDBAdmin(__DIR__);
                     case "/database/change":
                     case "/database/configuration":
                     case "/database/export":
+                    case "/database/history":
                     case "/database/import":
                     case "/database/list":
                     case "/database/search":
@@ -268,6 +269,7 @@ $admin = new CSVDBAdmin(__DIR__);
                     case "/database/change":
                     case "/database/configuration":
                     case "/database/export":
+                    case "/database/history":
                     case "/database/import":
                     case "/database/list":
                     case "/database/search":

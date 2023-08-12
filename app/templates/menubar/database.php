@@ -63,11 +63,19 @@
                     } ?>
                 </a>
             </li>
+            <li class="nav-item <?= ($_GET["route"] == "/database/history") ? "active" : "" ?>">
+                <a class="nav-link text-nowrap" href="index.php?route=/database/history&db=<?= $_GET["db"] ?>">
+                    <img src="themes/dot.gif" title="History" alt="History" class="icon ic_b_group">&nbsp;History
+                    <?php if ($_GET["route"] == "/database/history") {
+                        echo '<span class="visually-hidden">(aktuelle)</span>';
+                    } ?>
+                </a>
+            </li>
             <li class="nav-item <?= ($_GET["route"] == "/database/configuration") ? "active" : "" ?>">
                 <a class="nav-link text-nowrap" href="index.php?route=/database/configuration&db=<?= $_GET["db"] ?>">
                     <img src="themes/dot.gif" title="Konfiguration" alt="Konfiguration" class="icon ic_b_tblops">&nbsp;Konfiguration
                     <?php if ($_GET["route"] == "/database/configuration") {
-                        echo '<span class="visually-hidden">(aktuelle)</span>';
+                    echo '<span class="visually-hidden">(aktuelle)</span>';
                     } ?>
                 </a>
             </li>

@@ -15,7 +15,7 @@ if (!empty($_GET["delete_constraint"])) {
 }
 if (!empty($_GET["rename_field"])) {
     var_dump($_GET);
-    // todo this is change in the schema!
+    // todo this changes the schema as well!
 
 }
 if (!empty($_GET["action"])) {

@@ -2,7 +2,8 @@
     "id": {
         "type": "integer",
         "constraint": "primary",
-        "encoding": "UTF-8"
+        "encoding": "UTF-8",
+        "default": ""
     },
     "header1": {
         "type": "string",
