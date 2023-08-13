@@ -5,6 +5,7 @@ namespace CSVDBAdmin;
 use CSVDB\Helpers\CSVConfig;
 use CSVDB\Helpers\CSVUtilities;
 use League\Csv\Exception;
+use League\Csv\InvalidArgument;
 
 class CSVDBAdmin
 {
@@ -105,7 +106,6 @@ class CSVDBAdmin
     {
         if ($this->json_validate($schema)) {
             $file = $this->basedir . "/" . $database . "_schema.json";
-            var_dump($this->json_validate($schema));
             $result = file_put_contents($file, $schema);
 
             if ($result) {
@@ -167,7 +167,6 @@ class CSVDBAdmin
     public function remove_constraint(string $constraint, string $database)
     {
         $data = $this->database($database);
-        var_dump($data->csvdb()->constraints());
         $data->csvdb()->remove_unique($constraint);
         $this->storeSchema(json_encode($data->csvdb()->getSchema(), JSON_PRETTY_PRINT), $database);
     }

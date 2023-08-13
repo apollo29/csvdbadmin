@@ -3,10 +3,9 @@
 use CSVDB\Enums\ConstraintEnum;
 use League\Csv\InvalidArgument;
 
-// todo rename, remove constraint
+// todo exceptions
 
 if (!empty($_GET["delete_constraint"])) {
-    var_dump($_GET);
     try {
         $admin->remove_constraint($_GET["delete_constraint"], $_GET["db"]);
     } catch (Exception $e) {
@@ -14,7 +13,6 @@ if (!empty($_GET["delete_constraint"])) {
     }
 }
 if (!empty($_GET["rename_field"])) {
-    // todo this changes the schema as well!
     $admin->rename_field($_GET["rename_field_value"],$_GET["rename_field"],$_GET["db"]);
 }
 if (!empty($_GET["action"])) {
