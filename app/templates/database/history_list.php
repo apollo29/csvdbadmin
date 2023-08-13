@@ -98,7 +98,7 @@ include "list_navigation.php";
     <table class="table table-light table-striped table-hover table-sm table_results ajax w-auto pma_table">
         <thead class="table-light">
         <tr>
-            <th class="column_action position-sticky d-print-none" colspan="2"></th>
+            <th class="column_action position-sticky d-print-none" colspan="3"></th>
             <?php
             $headers = $data->headers();
             foreach ($headers as $header) {
@@ -127,6 +127,16 @@ include "list_navigation.php";
                         <a href="index.php?route=/database/change&db=<?= $_GET["db"] ?>&history=<?= $_GET["history"] ?>&index=<?= $item[$data->index] ?>&action=insert">
                             <span class="text-nowrap">
                                 <img src="themes/dot.gif" title="Kopieren" alt="Kopieren" class="icon ic_b_insrow">&nbsp;Kopieren
+                            </span>
+                        </a>
+                    </span>
+                </td>
+
+                <td class="text-center d-print-none">
+                    <span class="text-nowrap">
+                        <a href="#" class="restore" data-index="<?= $item[$data->index] ?>" data-history="<?= $_GET["history"] ?>" data-database="<?= $_GET["db"] ?>">
+                            <span class="text-nowrap">
+                                <img src="themes/dot.gif" title="Kopieren" alt="Kopieren" class="icon ic_s_replication">&nbsp;Wiederherstellen
                             </span>
                         </a>
                     </span>
