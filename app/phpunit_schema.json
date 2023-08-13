@@ -1,5 +1,5 @@
 {
-    "id": {
+    "index": {
         "type": "integer",
         "constraint": "primary",
         "encoding": "UTF-8",

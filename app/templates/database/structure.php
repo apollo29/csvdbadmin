@@ -14,9 +14,8 @@ if (!empty($_GET["delete_constraint"])) {
     }
 }
 if (!empty($_GET["rename_field"])) {
-    var_dump($_GET);
     // todo this changes the schema as well!
-
+    $admin->rename_field($_GET["rename_field_value"],$_GET["rename_field"],$_GET["db"]);
 }
 if (!empty($_GET["action"])) {
     var_dump($_GET);

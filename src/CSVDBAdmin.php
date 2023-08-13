@@ -171,4 +171,69 @@ class CSVDBAdmin
         $data->csvdb()->remove_unique($constraint);
         $this->storeSchema(json_encode($data->csvdb()->getSchema(), JSON_PRETTY_PRINT), $database);
     }
+
+    // fields
+
+    /**
+     * @throws \Exception
+     */
+    public function rename_field(string $new_field, string $field, string $database)
+    {
+        if ($this->check_rename_field($new_field, $database)) {
+            $data = $this->database($database);
+            $delimiter = $data->csvdb()->config->delimiter;
+            if (($handle = fopen($data->file, "r")) !== FALSE) {
+                $header = fgetcsv($handle, 1000, $delimiter);
+                fclose($handle);
+
+                $index = array_search($field, $header, true);
+                $new_header = implode($delimiter, array_replace($header, [$index => $new_field]));
+
+                $lines = file($data->file);
+                $lines[0] = $new_header . "\n";
+                file_put_contents($data->file, $lines);
+
+                if ($data->hasSchema()) {
+                    $this->rename_field_schema($new_field, $field, $database);
+                }
+                else {
+                    $this->refreshDatabase($database);
+                }
+            }
+        } else {
+            throw new Exception('There is another Field with the same name: ' . $new_field);
+        }
+    }
+
+    /**
+     * @throws InvalidArgument
+     * @throws Exception
+     * @throws \Exception
+     */
+    private function check_rename_field(string $new_field, string $database): bool
+    {
+        $data = $this->database($database);
+        if (in_array($new_field, $data->csvdb()->headers())) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function rename_field_schema(string $new_field, string $field, string $database)
+    {
+        $data = $this->database($database);
+        $schema = $data->csvdb()->getSchema();
+        $new_schema = array();
+        foreach ($schema as $key => $value) {
+            if ($key != $field) {
+                $new_schema[$key] = $value;
+            } else {
+                $new_schema[$new_field] = $value;
+            }
+        }
+        $this->storeSchema(json_encode($new_schema, JSON_PRETTY_PRINT), $database);
+    }
 }
