@@ -82,6 +82,8 @@
                 <input type="hidden" name="route" value="/database/list">
                 <input type="hidden" name="db" value="<?= $_GET["db"] ?>">
                 <input type="hidden" name="sql_query" value="<?= $sql_query ?>">
+                <input type="hidden" name="history"
+                       value="<?= (array_key_exists("history", $_GET)) ? $_GET["history"] : "" ?>">
                 <input type="checkbox" name="showAll" id="showAll" class="showAllRows" value="all" <?php if ($showAll) {
                     echo 'checked="checked"';
                 } ?>>

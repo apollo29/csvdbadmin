@@ -7,7 +7,7 @@ if (!empty($_GET["sql_query"])) {
 ?>
 <div class="card mb-3">
     <div class="card-header">
-        SQL-Befehl(e) auf Server <a href="index.php?route=/server/databases">"127.0.0.1"</a> ausführen:
+        SQL-Befehl(e) auf Server <a href="index.php?route=/server/databases">"<?= $_SERVER['SERVER_NAME'] ?>"</a> ausführen:
     </div>
     <div class="card-body">
         <div id="queryfieldscontainer">

@@ -101,4 +101,17 @@ class CSVDBData
         $path_parts = pathinfo($file);
         return $path_parts["basename"];
     }
+
+    // history
+
+    public function history(): array
+    {
+        $dir = $this->csvdb->history_dir();
+        $files = scandir($dir, SCANDIR_SORT_DESCENDING);
+        $result = array();
+        foreach ($files as $file) {
+            $result[$file] = $dir . $file;
+        }
+        return $result;
+    }
 }

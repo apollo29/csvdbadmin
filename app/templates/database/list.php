@@ -83,6 +83,7 @@ if (isset($_GET["showAll"]) && $_GET["showAll"] == "all") {
 }
 ?>
 <script src="script/database/list.js"></script>
+<script src="script/database/sql.js"></script>
 <div class="result_query">
     <div class="alert alert-success" role="alert">
         <img src="themes/dot.gif" title="" alt="" class="icon ic_s_success"> Zeige Datensätze <?= $pos ?>
@@ -90,9 +91,26 @@ if (isset($_GET["showAll"]) && $_GET["showAll"] == "all") {
     </div>
 
     <div class="sqlOuter">
-        <pre><code class="language-sql"><?= $sql_query ?></code></pre>
+        <pre class="sql_query"><code class="language-sql"><?= $sql_query ?></code></pre>
+
+        <form method="get" name="sqlQuery" class="hide" id="sqlQuery">
+            <input type="hidden" name="route" value="/database/list">
+            <input type="hidden" name="db" value="<?= $_GET["db"] ?>">
+            <input type="hidden" name="pos" value="<?= $pos ?>">
+            <input type="hidden" name="limit" value="<?= $limit ?>">
+
+            <div>
+                <div id="editor" class="sql-editor"><?= $sql_query ?></div>
+                <textarea class="hide" name="sql_query" id="sql_query"><?= $sql_query ?></textarea>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-primary ms-1" type="submit" id="button_submit_query" name="SQL">OK</button>
+                <button class="btn inline_edit_cancel ms-1" type="button">Abbrechen</button>
+            </div>
+        </form>
     </div>
     <div class="tools d-print-none">
+        [&nbsp;<a href="#" class="inline_edit">Inline Bearbeiten</a>&nbsp;]
         [&nbsp;<a href="index.php?route=/database/sql&db=<?= $_GET["db"] ?>&sql_query=<?= $sql_query ?>">Bearbeiten</a>&nbsp;]
         [&nbsp;<a
                 href="index.php?route=/database/list&db=<?= $_GET["db"] ?>&sql_query=<?= $sql_query ?>&pos=<?= $pos ?>&limit=<?= $limit ?>">Aktualisieren</a>&nbsp;]

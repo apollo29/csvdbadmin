@@ -58,4 +58,14 @@ $(document).ready(function () {
             form.submit();
         });
     });
+
+    $(".inline_edit").click(function (){
+        $("#sqlQuery").toggleClass("hide");
+        $(".sql_query").toggleClass("hide");
+    });
+
+    $(".inline_edit_cancel").click(function (){
+        $("#sqlQuery").toggleClass("hide");
+        $(".sql_query").toggleClass("hide");
+    });
 });

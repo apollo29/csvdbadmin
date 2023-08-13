@@ -33,6 +33,11 @@ function getInputValue(string $type, string $value): string
     }
 }
 
+if (array_key_exists("history", $_GET) && !empty($_GET["history"])) {
+    echo '<div class="alert alert-warning" role="alert">' . "\n";
+    echo '<p><strong>Datensatz aus Datenbank History "'.$_GET["history"].'"</strong></p><p>Es wird ein Datensatz aus der Datenbank History bearbeitet.</p>' . "\n";
+    echo '</div>' . "\n";
+}
 ?>
 <div class="table-responsive-lg">
     <table class="table table-light table-striped align-middle my-3 insertRowTable w-auto">

@@ -63,7 +63,7 @@
                     } ?>
                 </a>
             </li>
-            <li class="nav-item <?= ($_GET["route"] == "/database/history") ? "active" : "" ?>">
+            <li class="nav-item <?= ($_GET["route"] == "/database/history" || $_GET["route"] == "/database/history/list") ? "active" : "" ?>">
                 <a class="nav-link text-nowrap" href="index.php?route=/database/history&db=<?= $_GET["db"] ?>">
                     <img src="themes/dot.gif" title="History" alt="History" class="icon ic_b_group">&nbsp;History
                     <?php if ($_GET["route"] == "/database/history") {

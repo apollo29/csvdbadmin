@@ -89,13 +89,21 @@ $admin = new CSVDBAdmin(__DIR__);
                             <div class="clearfloat"></div>
                         </li>
                         <?php
-                        foreach ($admin->databases() as $database => $csvdb) {
+                        $databases = $admin->databases();
+                        $i = 0;
+                        $numItems = count($databases);
+                        foreach ($databases as $database => $csvdb) {
                             $icon = "ic_s_db";
                             if (!$csvdb->hasConfig()) {
                                 $icon = "ic_b_engine";
                             }
-                            echo '<li>' . "\n";
-                            echo '<div class="block"><i></i><b></b></div>' . "\n";
+                            $last = (++$i === $numItems) ? "last" : "";
+                            echo '<li class="' . $last . ' database">' . "\n";
+                            echo '<div class="block">' . "\n" . '<i></i>' . "\n";
+                            if (empty($last)) {
+                                echo '<b></b>' . "\n";
+                            }
+                            echo '</div>' . "\n";
                             echo '<div class="block second"><a href="index.php?route=/database/structure&db=' . $database . '"><img
                                             src="themes/dot.gif"
                                             title="Datenbank-Konfiguration"
@@ -106,110 +114,6 @@ $admin = new CSVDBAdmin(__DIR__);
                             echo '</li>' . "\n";
                         }
                         ?>
-                        <li class="navGroup">
-                            <div class="block">
-                                <i></i>
-                                <b></b>
-                                <a class="expander loaded container" href="#">
-                                <span class="hide paths_nav" data-apath="cm9vdA=="
-                                      data-vpath="cm9vdA==.YW5ub2RvbWluaQ==" data-pos="0"></span>
-                                    <img src="themes/dot.gif" title="Auf-/Zuklappen" alt="Auf-/Zuklappen"
-                                         class="icon ic_b_plus">
-                                </a>
-                            </div>
-                            <div class="fst-italic">
-
-                                <div class="block second">
-                                    <u><img src="themes/dot.gif" title="Gruppen" alt="Gruppen" class="icon ic_b_group"></u>
-                                </div>
-                                &nbsp;annodomini
-
-
-                            </div>
-
-                            <div class="clearfloat"></div>
-
-                            <div class="list_container" style="display: none;">
-                                <ul>
-                                    <li class="database database">
-                                        <div class="block">
-                                            <i></i>
-                                            <b></b>
-                                            <a class="expander" href="#">
-                                            <span class="hide paths_nav" data-apath="cm9vdA==.YW5ub2RvbWluaQ=="
-                                                  data-vpath="cm9vdA==.YW5ub2RvbWluaQ==." data-pos="0"></span>
-                                                <img src="themes/dot.gif" title="Auf-/Zuklappen" alt="Auf-/Zuklappen"
-                                                     class="icon ic_b_plus">
-                                            </a>
-                                        </div>
-
-                                        <div class="block second">
-                                            <a href="index.php?route=/database/operations&db=annodomini"><img
-                                                        src="themes/dot.gif" title="Datenbank-Operationen"
-                                                        alt="Datenbank-Operationen" class="icon ic_s_db"></a>
-                                        </div>
-
-                                        <a class="hover_show_full"
-                                           href="index.php?route=/database/structure&db=annodomini"
-                                           title="Struktur">annodomini</a>
-
-
-                                        <div class="clearfloat"></div>
-
-
-                                    </li>
-                                    <li class="database last database">
-                                        <div class="block">
-                                            <i></i>
-
-                                            <a class="expander" href="#">
-                                            <span class="hide paths_nav" data-apath="cm9vdA==.YW5ub2RvbWluaV9kZXY="
-                                                  data-vpath="cm9vdA==.YW5ub2RvbWluaQ==.ZGV2" data-pos="0"></span>
-                                                <img src="themes/dot.gif" title="Auf-/Zuklappen" alt="Auf-/Zuklappen"
-                                                     class="icon ic_b_plus">
-                                            </a>
-                                        </div>
-
-                                        <div class="block second">
-                                            <a href="index.php?route=/database/operations&db=annodomini_dev"><img
-                                                        src="themes/dot.gif" title="Datenbank-Operationen"
-                                                        alt="Datenbank-Operationen" class="icon ic_s_db"></a>
-                                        </div>
-
-                                        <a class="hover_show_full"
-                                           href="index.php?route=/database/structure&db=annodomini_dev"
-                                           title="Struktur">annodomini_dev</a>
-
-
-                                        <div class="clearfloat"></div>
-
-
-                                    </li>
-
-                                </ul>
-                            </div>
-
-                        </li>
-                        <li class="last database">
-                            <div class="block">
-                                <i></i>
-                            </div>
-
-                            <div class="block second">
-                                <a href="index.php?route=/database/operations&amp;db=test"><img src="themes/dot.gif"
-                                                                                                title="Datenbank-Operationen"
-                                                                                                alt="Datenbank-Operationen"
-                                                                                                class="icon ic_s_db"></a>
-                            </div>
-
-                            <a class="hover_show_full" href="index.php?route=/database/structure&amp;db=test"
-                               title="Struktur">test</a>
-
-
-                            <div class="clearfloat"></div>
-
-
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -225,7 +129,7 @@ $admin = new CSVDBAdmin(__DIR__);
                     <li class="breadcrumb-item">
                         <img src="themes/dot.gif" title="root" alt="root" class="icon ic_s_host">
                         <a href="index.php?route=/">
-                            Server: 127.0.0.1
+                            Server: <?= $_SERVER['SERVER_NAME'] ?>
                         </a>
                     </li>
                     <?php
@@ -247,6 +151,7 @@ $admin = new CSVDBAdmin(__DIR__);
                     case "/database/configuration":
                     case "/database/export":
                     case "/database/history":
+                    case "/database/history/list":
                     case "/database/import":
                     case "/database/list":
                     case "/database/search":
@@ -279,6 +184,9 @@ $admin = new CSVDBAdmin(__DIR__);
                     case "/server/import":
                     case "/server/sql":
                         $content_template = "templates" . $route . ".php";
+                        break;
+                    case "/database/history/list":
+                        $content_template = "templates/database/history_list.php";
                         break;
                     default:
                         $content_template = "templates/main.php";
