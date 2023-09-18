@@ -62,7 +62,7 @@ $db = $admin->get_database($_GET);
                            rel="noopener noreferrer"><img src="themes/dot.gif" title="CSVDBAdmin-Dokumentation"
                                                           alt="CSVDBAdmin-Dokumentation" class="icon ic_b_docs"></a>
 
-                        <a id="pma_navigation_reload" href="#" title="Navigations-Panel aktualisieren"><img
+                        <a id="pma_navigation_reload" href="javascript:location.reload()" title="Navigations-Panel aktualisieren"><img
                                     src="themes/dot.gif"
                                     title="Navigations-Panel aktualisieren"
                                     alt="Navigations-Panel aktualisieren"
