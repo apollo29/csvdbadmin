@@ -15,14 +15,7 @@ try {
              */
 
             $admin = new CSVDBAdmin(__DIR__);
-            if (is_array($_POST['db_select'])) {
-                // todo
-                $db = $_POST['db_select'][0];
-            } else {
-                $db = $_POST['db_select'];
-            }
-            $data = $admin->database($db);
-            $records = $data->csvdb()->select()->export($_POST['format']);
+            $records = $admin->export($_POST['db_select'], $_POST['format']);
 
             $filename = ".csv";
             switch ($_POST['format']) {
@@ -39,20 +32,19 @@ try {
 
             header('Content-Description: File Transfer');
             header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename=export'.$filename);
+            header('Content-Disposition: attachment; filename=export' . $filename);
             header('Content-Length: ' . strlen($records));
             header('Connection: close');
             echo $records;
-            exit;
         } else {
-            // todo
+// todo
 //            if (array_key_exists("route", $_POST)) {
 //                header("Location: index.php?route=" . $_POST['route'] . "&error=export");
 //                exit;
 //            }
             header("Location: index.php?route=/server/export&error=export");
-            exit;
         }
+        exit;
     } else {
         header("Location: index.php?route=/server/export&error=post");
         exit;

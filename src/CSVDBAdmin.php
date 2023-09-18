@@ -257,4 +257,24 @@ class CSVDBAdmin
         }
         return "";
     }
+
+    // export
+
+    /**
+     * @throws \Exception
+     */
+    public function export($db, string $format): string
+    {
+        if (!is_array($db)) {
+            $data = $this->database($db);
+            return $data->csvdb()->select()->export($format);
+        } else {
+            $export = "";
+            foreach ($db as $database) {
+                $export .= $this->export($database, $format) . "\n";
+            }
+            return $export;
+        }
+
+    }
 }
