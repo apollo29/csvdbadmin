@@ -2,7 +2,8 @@
 
 use League\Csv\InvalidArgument;
 
-$data = $admin->database($_GET['db']);
+$db = $admin->get_database($_GET);
+$data = $admin->database($db);
 
 if (!empty($_GET["id_rows"])) {
     foreach ($_GET["id_rows"] as $index) {
@@ -17,7 +18,7 @@ if (!empty($_GET["id_rows"])) {
 
 $count = $data->csvdb()->count()->get()['count'];
 
-$sql_query = "SELECT * FROM " . $_GET["db"];
+$sql_query = "SELECT * FROM " . $db;
 if (!empty($_GET["sql_query"])) {
     $sql_query = $_GET["sql_query"];
 }
@@ -50,7 +51,7 @@ if ($_POST) {
         }
 
         if (!empty($where)) {
-            $sql_query = "SELECT * FROM " . $_GET["db"] . " WHERE" . $where;
+            $sql_query = "SELECT * FROM " . $db . " WHERE" . $where;
         }
     }
 }
@@ -95,7 +96,7 @@ if (isset($_GET["showAll"]) && $_GET["showAll"] == "all") {
 
         <form method="get" name="sqlQuery" class="hide" id="sqlQuery">
             <input type="hidden" name="route" value="/database/list">
-            <input type="hidden" name="db" value="<?= $_GET["db"] ?>">
+            <input type="hidden" name="db" value="<?= $db ?>">
             <input type="hidden" name="pos" value="<?= $pos ?>">
             <input type="hidden" name="limit" value="<?= $limit ?>">
 
@@ -111,9 +112,9 @@ if (isset($_GET["showAll"]) && $_GET["showAll"] == "all") {
     </div>
     <div class="tools d-print-none">
         [&nbsp;<a href="#" class="inline_edit">Inline Bearbeiten</a>&nbsp;]
-        [&nbsp;<a href="index.php?route=/database/sql&db=<?= $_GET["db"] ?>&sql_query=<?= $sql_query ?>">Bearbeiten</a>&nbsp;]
+        [&nbsp;<a href="index.php?route=/database/sql&db=<?= $db ?>&sql_query=<?= $sql_query ?>">Bearbeiten</a>&nbsp;]
         [&nbsp;<a
-                href="index.php?route=/database/list&db=<?= $_GET["db"] ?>&sql_query=<?= $sql_query ?>&pos=<?= $pos ?>&limit=<?= $limit ?>">Aktualisieren</a>&nbsp;]
+                href="index.php?route=/database/list&db=<?= $db ?>&sql_query=<?= $sql_query ?>&pos=<?= $pos ?>&limit=<?= $limit ?>">Aktualisieren</a>&nbsp;]
     </div>
 </div>
 <!-- DATABASE NAVIGATION -->
@@ -124,7 +125,7 @@ include "list_navigation.php";
 <!-- DATABASE -->
 <form method="get" name="resultsForm">
     <input type="hidden" name="route" value="/database/list">
-    <input type="hidden" name="db" value="<?= $_GET["db"] ?>">
+    <input type="hidden" name="db" value="<?= $db ?>">
     <input type="hidden" name="sql_query" value="<?= $sql_query ?>">
     <input type="hidden" name="pos" value="<?= $pos ?>">
     <input type="hidden" name="limit" value="<?= $limit ?>">
@@ -159,7 +160,7 @@ include "list_navigation.php";
 
                     <td class="text-center d-print-none edit_row_anchor">
                     <span class="text-nowrap">
-                        <a href="index.php?route=/database/change&db=<?= $_GET["db"] ?>&index=<?= $item[$data->csvdb()->index] ?>&action=update">
+                        <a href="index.php?route=/database/change&db=<?= $db ?>&index=<?= $item[$data->csvdb()->index] ?>&action=update">
                             <span class="text-nowrap">
                                 <img src="themes/dot.gif" title="Bearbeiten" alt="Bearbeiten" class="icon ic_b_edit">&nbsp;Bearbeiten
                             </span>
@@ -169,7 +170,7 @@ include "list_navigation.php";
 
                     <td class="text-center d-print-none">
                     <span class="text-nowrap">
-                        <a href="index.php?route=/database/change&db=<?= $_GET["db"] ?>&index=<?= $item[$data->csvdb()->index] ?>&action=insert">
+                        <a href="index.php?route=/database/change&db=<?= $db ?>&index=<?= $item[$data->csvdb()->index] ?>&action=insert">
                             <span class="text-nowrap">
                                 <img src="themes/dot.gif" title="Kopieren" alt="Kopieren" class="icon ic_b_insrow">&nbsp;Kopieren
                             </span>
@@ -180,7 +181,7 @@ include "list_navigation.php";
                     <td class="text-center d-print-none ajax">
                     <span class="text-nowrap">
                         <a href="#" class="delete_row requireConfirm"
-                           data-route="index.php?route=/database/list&db=<?= $_GET["db"] ?>&pos=<?= $pos ?>&limit=<?= $limit ?>&id_rows[]=<?= $item[$data->csvdb()->index] ?>">
+                           data-route="index.php?route=/database/list&db=<?= $db ?>&pos=<?= $pos ?>&limit=<?= $limit ?>&id_rows[]=<?= $item[$data->csvdb()->index] ?>">
                             <span class="text-nowrap">
                                 <img src="themes/dot.gif" title="Löschen" alt="Löschen" class="icon ic_b_drop">&nbsp;Löschen
                             </span>
@@ -236,7 +237,7 @@ include "list_navigation.php";
         </span>
         </button>
 
-        <a href="index.php?route=/database/export&db=<?= $_GET["db"] ?>&sql_query=<?= $sql_query ?>" class="btn">
+        <a href="index.php?route=/database/export&db=<?= $db ?>&sql_query=<?= $sql_query ?>" class="btn">
         <span class="text-nowrap">
             <img src="themes/dot.gif" title="Exportieren" alt="Exportieren" class="icon ic_b_tblexport">&nbsp;Exportieren
         </span>

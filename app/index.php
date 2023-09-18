@@ -4,8 +4,9 @@ use CSVDBAdmin\CSVDBAdmin;
 
 require_once '../vendor/autoload.php';
 
-$route = $_GET["route"];
 $admin = new CSVDBAdmin(__DIR__);
+$route = $admin->get_route($_GET);
+$db = $admin->get_database($_GET);
 ?>
 <html lang="en">
 <head>
@@ -133,11 +134,11 @@ $admin = new CSVDBAdmin(__DIR__);
                         </a>
                     </li>
                     <?php
-                    if (isset($_GET['db'])) {
+                    if (isset($db)) {
                         echo '<li class="breadcrumb-item">
                                 <img src="themes/dot.gif" title="" alt="" class="icon ic_s_db">
-                                <a href="index.php?route=/database/list&db=' . $_GET['db'] . '">
-                                    Datenbank: ' . $_GET['db'] . '
+                                <a href="index.php?route=/database/list&db=' . $db . '">
+                                    Datenbank: ' . $db . '
                                 </a>
                              </li>';
                     }

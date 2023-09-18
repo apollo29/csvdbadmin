@@ -6,6 +6,7 @@ use CSVDB\Helpers\CSVConfig;
 use CSVDB\Helpers\CSVUtilities;
 use League\Csv\Exception;
 use League\Csv\InvalidArgument;
+use PHPSQLParser\PHPSQLParser;
 
 class CSVDBAdmin
 {
@@ -194,8 +195,7 @@ class CSVDBAdmin
 
                 if ($data->hasSchema()) {
                     $this->rename_field_schema($new_field, $field, $database);
-                }
-                else {
+                } else {
                     $this->refreshDatabase($database);
                 }
             }
@@ -234,5 +234,27 @@ class CSVDBAdmin
             }
         }
         $this->storeSchema(json_encode($new_schema, JSON_PRETTY_PRINT), $database);
+    }
+
+    public function get_database(array $get): ?string
+    {
+        if (array_key_exists("db", $get)) {
+            $db = $get["db"];
+        } else if (array_key_exists("sql_query", $get)) {
+            $sql_query = $get["sql_query"];
+            $parser = new PHPSQLParser($sql_query);
+            $db = $parser->parsed["FROM"][0]["table"];
+        } else {
+            return null;
+        }
+        return $db;
+    }
+
+    public function get_route(array $get): string
+    {
+        if (array_key_exists("route", $get)) {
+            return $get["route"];
+        }
+        return "";
     }
 }

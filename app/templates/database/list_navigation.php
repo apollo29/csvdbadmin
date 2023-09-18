@@ -1,3 +1,6 @@
+<?php
+$db = $admin->get_database($_GET);
+?>
 <table class="navigation d-print-none">
     <tbody>
     <tr>
@@ -6,7 +9,7 @@
             <td>
                 <form action="index.php" method="get">
                     <input type="hidden" name="route" value="/database/list">
-                    <input type="hidden" name="db" value="<?= $_GET["db"] ?>">
+                    <input type="hidden" name="db" value="<?= $db ?>">
                     <input type="hidden" name="sql_query" value="<?= $sql_query ?>">
                     <input type="hidden" name="pos" value="0">
                     <input type="hidden" name="limit" value="<?= $limit ?>">
@@ -16,7 +19,7 @@
             <td>
                 <form action="index.php" method="get">
                     <input type="hidden" name="route" value="/database/list">
-                    <input type="hidden" name="db" value="<?= $_GET["db"] ?>">
+                    <input type="hidden" name="db" value="<?= $db ?>">
                     <input type="hidden" name="sql_query" value="<?= $sql_query ?>">
                     <input type="hidden" name="pos" value="<?= ($pos - $limit) ?>">
                     <input type="hidden" name="limit" value="<?= $limit ?>">
@@ -29,7 +32,7 @@
             <td>
                 <form action="index.php" method="get" name="pageselector">
                     <input type="hidden" name="route" value="/database/list">
-                    <input type="hidden" name="db" value="<?= $_GET["db"] ?>">
+                    <input type="hidden" name="db" value="<?= $db ?>">
                     <input type="hidden" name="sql_query" value="<?= $sql_query ?>">
                     <input type="hidden" name="limit" value="<?= $limit ?>">
                     <select class="pageselector" name="pos">
@@ -52,7 +55,7 @@
             <td>
                 <form action="index.php" method="get">
                     <input type="hidden" name="route" value="/database/list">
-                    <input type="hidden" name="db" value="<?= $_GET["db"] ?>">
+                    <input type="hidden" name="db" value="<?= $db ?>">
                     <input type="hidden" name="sql_query" value="<?= $sql_query ?>">
                     <input type="hidden" name="pos" value="<?= ($pos + $limit) ?>">
                     <input type="hidden" name="limit" value="<?= $limit ?>">
@@ -62,7 +65,7 @@
             <td>
                 <form action="index.php" method="get">
                     <input type="hidden" name="route" value="/database/list">
-                    <input type="hidden" name="db" value="<?= $_GET["db"] ?>">
+                    <input type="hidden" name="db" value="<?= $db ?>">
                     <input type="hidden" name="sql_query" value="<?= $sql_query ?>">
                     <input type="hidden" name="pos" value="25">
                     <input type="hidden" name="limit" value="<?= $limit ?>">
@@ -80,7 +83,7 @@
         <td>
             <form action="index.php" method="get" name="showAll">
                 <input type="hidden" name="route" value="/database/list">
-                <input type="hidden" name="db" value="<?= $_GET["db"] ?>">
+                <input type="hidden" name="db" value="<?= $db ?>">
                 <input type="hidden" name="sql_query" value="<?= $sql_query ?>">
                 <input type="hidden" name="history"
                        value="<?= (array_key_exists("history", $_GET)) ? $_GET["history"] : "" ?>">
@@ -97,7 +100,7 @@
         <td class="navigation_goto">
             <form action="index.php" method="get" class="maxRowsForm" name="limit">
                 <input type="hidden" name="route" value="/database/list">
-                <input type="hidden" name="db" value="<?= $_GET["db"] ?>">
+                <input type="hidden" name="db" value="<?= $db ?>">
                 <input type="hidden" name="sql_query" value="<?= $sql_query ?>">
                 <input type="hidden" name="pos" value="<?= $pos ?>">
 
