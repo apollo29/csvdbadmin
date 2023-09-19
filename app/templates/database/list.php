@@ -66,7 +66,7 @@ if (!empty($_GET["limit"])) {
 }
 
 $query = "$sql_query LIMIT $pos, $limit";
-$rows = $data->csvdb()->query($query);
+$rows = $data->csvdb()->query($query)->get();
 
 $maxrow = $pos + $limit;
 if ($maxrow > count($rows)) {
@@ -105,7 +105,7 @@ if (isset($_GET["showAll"]) && $_GET["showAll"] == "all") {
                 <textarea class="hide" name="sql_query" id="sql_query"><?= $sql_query ?></textarea>
             </div>
             <div class="card-footer">
-                <button class="btn btn-primary ms-1" type="submit" id="button_submit_query" name="SQL">OK</button>
+                <button class="btn btn-primary ms-1" type="submit" id="button_submit_query">OK</button>
                 <button class="btn inline_edit_cancel ms-1" type="button">Abbrechen</button>
             </div>
         </form>

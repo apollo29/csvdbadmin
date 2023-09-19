@@ -34,7 +34,7 @@ if (!empty($_GET["limit"])) {
 }
 
 $query = "$sql_query LIMIT $pos, $limit";
-$rows = $data->query($query);
+$rows = $data->query($query)->get();
 
 $maxrow = $pos + $limit;
 if ($maxrow > count($rows)) {

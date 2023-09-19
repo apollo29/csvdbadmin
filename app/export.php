@@ -5,53 +5,55 @@ use CSVDBAdmin\CSVDBAdmin;
 
 require '../vendor/autoload.php';
 
+$admin = new CSVDBAdmin(__DIR__);
+$route = $admin->get_route($_POST, "/server/export");
+$db = $admin->get_database($_POST);
+if (!empty($db)) {
+    $db = "&db=" . $db;
+}
+
 try {
     if ($_POST) {
         if (array_key_exists("db_select", $_POST) && array_key_exists("format", $_POST)) {
-            /*
-             * db_select
-             * format
-             * sql query!
-             */
+            $sql_query = null;
+            if (array_key_exists("sql_query", $_POST)) {
+                $sql_query = $_POST["sql_query"];
+            }
+            $records = $admin->export($_POST['db_select'], $_POST['format'], $sql_query);
 
-            $admin = new CSVDBAdmin(__DIR__);
-            $records = $admin->export($_POST['db_select'], $_POST['format']);
+            $filename = "export";
+            if (array_key_exists("filename", $_POST)) {
+                $filename = $_POST["filename"];
+            }
 
-            $filename = ".csv";
+            $extension = ".csv";
             switch ($_POST['format']) {
                 case ExportEnum::JSON:
-                    $filename = ".json";
+                    $extension = ".json";
                     break;
                 case ExportEnum::SQL:
-                    $filename = ".sql";
+                    $extension = ".sql";
                     break;
                 case ExportEnum::PHP:
-                    $filename = ".php";
+                    $extension = ".php";
                     break;
             }
 
             header('Content-Description: File Transfer');
             header('Content-Type: application/octet-stream');
-            header('Content-Disposition: attachment; filename=export' . $filename);
+            header('Content-Disposition: attachment; filename=export' . $extension);
             header('Content-Length: ' . strlen($records));
             header('Connection: close');
             echo $records;
         } else {
-// todo
-//            if (array_key_exists("route", $_POST)) {
-//                header("Location: index.php?route=" . $_POST['route'] . "&error=export");
-//                exit;
-//            }
-            header("Location: index.php?route=/server/export&error=export");
+            header("Location: index.php?route=" . $route . $db . "&error=export");
         }
         exit;
     } else {
-        header("Location: index.php?route=/server/export&error=post");
+        header("Location: index.php?route=" . $route . $db . "&error=post");
         exit;
     }
 } catch (Exception $e) {
-    header("Location: index.php?route=/server/export&error=exception");
+    header("Location: index.php?route=" . $route . $db . "&error=exception");
     exit;
 }
-?>
-

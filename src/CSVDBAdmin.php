@@ -250,10 +250,12 @@ class CSVDBAdmin
         return $db;
     }
 
-    public function get_route(array $get): string
+    public function get_route(array $get, ?string $fallback = null): string
     {
         if (array_key_exists("route", $get)) {
             return $get["route"];
+        } else if (!empty($fallback)) {
+            return $fallback;
         }
         return "";
     }
@@ -263,10 +265,13 @@ class CSVDBAdmin
     /**
      * @throws \Exception
      */
-    public function export($db, string $format): string
+    public function export($db, string $format, ?string $query = null): string
     {
         if (!is_array($db)) {
             $data = $this->database($db);
+            if (!empty($query)) {
+                return $data->csvdb()->query($query)->export($format);
+            }
             return $data->csvdb()->select()->export($format);
         } else {
             $export = "";

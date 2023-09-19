@@ -1,6 +1,8 @@
 <h2>Datenbanken des aktuell ausgewählten Servers exportieren</h2>
-
+<!-- ERROR -->
 <form method="post" name="export" action="export.php">
+    <input type="hidden" name="filename" value="<?= $_SERVER['SERVER_NAME'] ?>" />
+
     <div class="exportoptions">
         <h3>Datenbanken:</h3>
         <div>
