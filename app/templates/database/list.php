@@ -129,6 +129,7 @@ include "list_navigation.php";
     <input type="hidden" name="sql_query" value="<?= $sql_query ?>">
     <input type="hidden" name="pos" value="<?= $pos ?>">
     <input type="hidden" name="limit" value="<?= $limit ?>">
+    <input type="hidden" name="index" value="<?= $data->csvdb()->index ?>">
 
     <div class="table-responsive-md">
         <table class="table table-light table-striped table-hover table-sm table_results ajax w-auto pma_table">
@@ -209,7 +210,7 @@ include "list_navigation.php";
         <label for="checkall">Alle auswählen</label>
         <em class="with-selected">markierte:</em>
 
-        <button class="btn btn-link mult_submit" type="submit" name="action" value="delete" title="Löschen"
+        <button class="btn btn-link mult_submit delete_rows" type="button" name="action" value="delete" title="Löschen"
                 data-route="">
             <span class="text-nowrap"><img src="themes/dot.gif" title="Löschen" alt="Löschen" class="icon ic_b_drop">&nbsp;Löschen</span>
         </button>

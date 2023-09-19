@@ -1,16 +1,35 @@
+<?php
+$error["class"] = "hide";
+$error["message"] = "";
+// error from export
+if (array_key_exists("error", $_GET)) {
+    $error["class"] = "";
+    switch ($_GET["error"]) {
+        case "export":
+            $error["message"] = "Es wurde(n) keine Datenbank(n) ausgewählt.";
+            break;
+        default:
+            $error["message"] = "Es ist ein unerwartetes Problem aufgetreten, bitte versuchen sie es erneut.";
+    }
+}
+?>
+<script src="script/server/export.js"></script>
 <h2>Datenbanken des aktuell ausgewählten Servers exportieren</h2>
 <!-- ERROR -->
+<div class="alert alert-danger <?= $error["class"] ?>" role="alert">
+    <h3>Fehler</h3>
+    <p><?= $error["message"] ?></p>
+</div>
+
 <form method="post" name="export" action="export.php">
-    <input type="hidden" name="filename" value="<?= $_SERVER['SERVER_NAME'] ?>" />
+    <input type="hidden" name="filename" value="<?= $_SERVER['SERVER_NAME'] ?>"/>
 
     <div class="exportoptions">
         <h3>Datenbanken:</h3>
         <div>
             <p>
-                <a href="#" onclick="Functions.setSelectOptions('dump', 'db_select[]', true); return false;">Alle
-                    auswählen</a> /
-                <a href="#" onclick="Functions.setSelectOptions('dump', 'db_select[]', false); return false;">Auswahl
-                    entfernen</a>
+                <a href="#" class="select_all_db">Alle auswählen</a> /
+                <a href="#" class="unselect_all_db">Auswahl entfernen</a>
             </p>
 
             <select name="db_select[]" id="db_select" size="5" multiple="">

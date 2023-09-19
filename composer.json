@@ -9,7 +9,7 @@
   },
   "require": {
     "php": "^7.4 || ^8.0",
-    "apollo29/csvdb": "^0.2.0",
+    "apollo29/csvdb": "^0.2.1",
     "vlucas/phpdotenv": "^4.1",
     "ext-mbstring": "*",
     "ext-json": "*",

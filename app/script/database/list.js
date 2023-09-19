@@ -50,21 +50,18 @@ $(document).ready(function () {
         return confirmdialog.dialog("open");
     }
 
-    $('form[name="resultsForm"]').on('submit', function (e) {
-        e.preventDefault();
-        var form = this;
-
+    $('.delete_rows[name="action"]').click(function () {
         confirmDialog(function () {
-            form.submit();
+            $('form[name="resultsForm"]').submit();
         });
     });
 
-    $(".inline_edit").click(function (){
+    $(".inline_edit").click(function () {
         $("#sqlQuery").toggleClass("hide");
         $(".sql_query").toggleClass("hide");
     });
 
-    $(".inline_edit_cancel").click(function (){
+    $(".inline_edit_cancel").click(function () {
         $("#sqlQuery").toggleClass("hide");
         $(".sql_query").toggleClass("hide");
     });
