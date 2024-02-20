@@ -11,6 +11,9 @@ $db = $admin->get_database($_GET);
 <html lang="en">
 <head>
     <title>CSVDBAdmin</title>
+    
+    <!-- todo BASE TAG -->
+    <base href="/app/" />
 
     <script
             src="https://code.jquery.com/jquery-3.6.3.min.js"
@@ -27,18 +30,21 @@ $db = $admin->get_database($_GET);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="themes/css/theme.css"/>
-    <link rel="stylesheet" type="text/css" href="themes/jquery/jquery-ui.css"/>
-    <link rel="stylesheet" type="text/css" href="themes/layout.css"/>
+    <link rel="stylesheet" type="text/css" href="./themes/css/theme.css"/>
+    <link rel="stylesheet" type="text/css" href="./themes/jquery/jquery-ui.css"/>
+    
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link rel="stylesheet" type="text/css" href="./themes/layout.css"/>
 
     <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.23.4/src-min-noconflict/ace.min.js"></script>
-    <script src="script/ace_mode-csvdb.js"></script>
+    <script src="./script/ace_mode-csvdb.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/ace-builds@1.23.4/css/ace.min.css" rel="stylesheet">
 
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.8.0/build/styles/github.min.css">
     <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js"></script>
-    <script src="script/main.js"></script>
+    <script src="./script/main.js"></script>
 </head>
 
 <body>
