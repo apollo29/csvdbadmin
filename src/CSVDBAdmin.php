@@ -284,11 +284,33 @@ class CSVDBAdmin
     }
 
     // import
-    public function import($db, string $fn, string $encoding = 'UTF-8') {
+    public function import($db, string $fn, string $encoding = 'UTF-8', $has_headers = true, $skip_empty_lines = true, $trim_fields = true) {
         // todo
-        $content = $this->file_get_contents_utf8($fn, $encoding);
+        $csv = array();
+        $row = 0;
         $delimiter = $this->detectDelimiter($fn);
-        $csv = str_getcsv($content, $delimiter);
+        if (($handle = fopen($fn, "r")) !== FALSE) {
+            while (($data = fgetcsv($handle, 1000, $delimiter)) !== FALSE) {
+                if ($has_headers && $row==0) {
+                    $headers = $data;
+                }
+                else {
+                    for ($i=0; $i < count($data); $i++) {
+                        if ($has_headers){
+                            $csv[$row][$headers[$i]]=$data[$i];
+                        }
+                        else {
+                            $csv[$row][]=$data[$i];
+                        }
+                    }
+                    $row++;
+                }
+            }
+            fclose($handle);
+        }
+
+        //$delimiter = $this->detectDelimiter($fn);
+        //$csv = str_getcsv($content, $delimiter);
         return $csv;
     }
 
