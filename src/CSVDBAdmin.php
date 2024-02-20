@@ -282,4 +282,55 @@ class CSVDBAdmin
         }
 
     }
+
+    // import
+    public function import($db, string $fn, string $encoding = 'UTF-8') {
+        // todo
+        $content = $this->file_get_contents_utf8($fn, $encoding);
+        $delimiter = $this->detectDelimiter($fn);
+        $csv = str_getcsv($content, $delimiter);
+        return $csv;
+    }
+
+    private function file_get_contents_utf8(string $fn, string $encoding): string {
+        $content = file_get_contents($fn);
+        return mb_convert_encoding($content, 'UTF-8', mb_detect_encoding($content, 'UTF-8, ISO-8859-1, '.$encoding , true));
+   }
+
+   // todo move to CSVUtilities
+   private function detectDelimiter($csvFile)
+   {
+       $delimiters = array(
+           ';' => 0,
+           ',' => 0,
+           "\t" => 0,
+           "|" => 0
+       );
+   
+       $handle = fopen($csvFile, "r");
+       $firstLine = fgets($handle);
+       fclose($handle); 
+       foreach ($delimiters as $delimiter => &$count) {
+           $count = count(str_getcsv($firstLine, $delimiter));
+       }
+   
+       return array_search(max($delimiters), $delimiters);
+   }
+
+   private function parse_csv($csv_string, $delimiter = ",", $has_headers = true, $skip_empty_lines = true, $trim_fields = true): array
+   {
+        $data = array();
+        $csv = str_getcsv($content, $delimiter);
+        if ($has_headers) {
+            $headers = $csv[0];
+            foreach($csv as $row) {
+                
+                foreach($row as $field) {
+
+                }
+            }
+        }
+
+        return $data;
+   }
 }
