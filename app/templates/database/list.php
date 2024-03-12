@@ -160,11 +160,16 @@ include "list_navigation.php";
 
                 foreach ($headers as $header) {
                     $order_direction = "ASC";
+                    $order_direction_class = "order_none";
                     if ($_GET["order"]==$header) {
-                        $order_direction = "DESC";
+                        $order_direction_class = "order_desc";
+                        if ($_GET["order_direction"]=="ASC") {
+                            $order_direction = "DESC";
+                            $order_direction_class = "order_asc";
+                        }
                     }
                     echo '<th class="text column_heading marker pointer" data-column="' . $header . '">' . "\n";
-                    echo '<span><a href="index.php?route=/database/list&db='. $db .'&sql_query='. $sql_query .'&order='.$header.'&order_direction='.$order_direction.'" class="sortlink sorticon">' . $header . '</a></span>' . "\n";
+                    echo '<span><a href="index.php?route=/database/list&db='. $db .'&sql_query='. $sql_query .'&order='.$header.'&order_direction='.$order_direction.'" class="'.$order_direction_class.' sortlink sorticon">' . $header . '</a></span>' . "\n";
                     echo '</th>' . "\n";
                 }
                 ?>
