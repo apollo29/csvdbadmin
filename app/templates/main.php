@@ -63,7 +63,9 @@ $data = $admin->databases();
                 </td>
 
                 <td class="value">
-                    encoding?
+                    <?php
+                        echo mb_detect_encoding(file_get_contents($csvdb->file), mb_detect_order(), TRUE);
+                    ?>
                 </td>
 
                 <td class="tool">

@@ -56,6 +56,21 @@ if ($_POST) {
     }
 }
 
+if (!empty($_GET["order"])) {
+    $direction = "ASC";
+    if (!empty($_GET["order_direction"])) {
+        $direction = $_GET["order_direction"];
+    }
+
+    if (str_contains($sql_query,"ORDER BY")){
+        $test = substr($sql_query, stripos($sql_query, "ORDER BY"));
+        $sql_query = str_replace($test, "ORDER BY ".$_GET["order"]." ".$direction, $sql_query);
+    }
+    else {
+        $sql_query = "$sql_query ORDER BY ".$_GET["order"]." ".$direction;
+    }
+}
+
 $pos = 0;
 if (!empty($_GET["pos"])) {
     $pos = (int)$_GET["pos"];
@@ -138,9 +153,18 @@ include "list_navigation.php";
                 <th class="column_action position-sticky d-print-none" colspan="4"></th>
                 <?php
                 $headers = $data->csvdb()->headers();
+                $row_headers = array_keys($rows[0]);
+                if (count($headers) != count($row_headers)){
+                    $headers = $row_headers;
+                }
+
                 foreach ($headers as $header) {
+                    $order_direction = "ASC";
+                    if ($_GET["order"]==$header) {
+                        $order_direction = "DESC";
+                    }
                     echo '<th class="text column_heading marker pointer" data-column="' . $header . '">' . "\n";
-                    echo '<span><a href="#" class="sortlink">' . $header . '</a></span>' . "\n";
+                    echo '<span><a href="index.php?route=/database/list&db='. $db .'&sql_query='. $sql_query .'&order='.$header.'&order_direction='.$order_direction.'" class="sortlink sorticon">' . $header . '</a></span>' . "\n";
                     echo '</th>' . "\n";
                 }
                 ?>

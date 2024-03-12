@@ -73,3 +73,9 @@ a.disabled {
     color: #adb5bd;
     pointer-events: none;
 }
+
+.sorticon::after {
+    content: url('img/asc_order.png');
+    width: 12px;
+    height: 12px;
+  }
