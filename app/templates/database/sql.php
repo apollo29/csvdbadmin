@@ -1,5 +1,10 @@
 <?php
 
+use League\Csv\InvalidArgument;
+
+$db = $admin->get_database($_GET);
+$data = $admin->database($db);
+
 // todo sql syntax checker und highlighter --> ACE
 
 $sql_query = "SELECT * FROM " . $_GET["db"];
@@ -13,9 +18,21 @@ if (!empty($_GET["sql_query"])) {
         SQL-Befehl(e) in Datenbank <a
                 href="index.php?route=/database/list&amp;db=<?= $_GET["db"] ?>"><?= $_GET["db"] ?></a> ausführen:
     </div>
-    <div>
-        <div id="editor" class="sql-editor"><?= $sql_query ?></div>
-        <textarea class="hide" name="sql_query" id="sql_query"><?= $sql_query ?></textarea>
+    <div class="row">
+        <div class="col">
+            <div id="editor" class="sql-editor" style="height: 100%;"><?= $sql_query ?></div>
+            <textarea class="hide" name="sql_query" id="sql_query"><?= $sql_query ?></textarea>
+        </div>
+        <div class="col-2">
+            <?php
+                $headers = $data->csvdb()->headers();
+                echo '<select size="'.count($headers).'">';
+                foreach($headers as $header) {
+                    echo "<option>".$header."</option>";
+                }
+                echo "</select>";
+            ?>
+        </div>
     </div>
     <div class="card-footer">
         <input class="btn btn-primary ms-1" type="submit" id="button_submit_query" name="SQL" tabindex="200" value="OK">
