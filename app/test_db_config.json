@@ -4,6 +4,6 @@
     "delimiter": ",",
     "headers": true,
     "cache": true,
-    "history": true,
+    "history": false,
     "autoincrement": false
 }

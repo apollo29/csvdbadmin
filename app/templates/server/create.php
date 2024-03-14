@@ -1,41 +1,93 @@
 <?php
 
 use CSVDB\Helpers\CSVConfig;
+use CSVDB\Enums\DatatypeEnum;
 
-if ($_POST) {
-    if (array_key_exists("action", $_POST)) {
-        if ($_POST["action"] == "config") {
-            $admin->storeConfig($_POST, $_GET["db"]);
-        } else if ($_POST["action"] == "schema") {
-            $admin->storeSchema($_POST['schema'], $_GET["db"]);
-        }
-    }
-}
-
-if (array_key_exists("delete", $_GET)) {
-    if ($_GET["delete"] == "config") {
-        $admin->deleteConfig($_GET["db"]);
-    } else if ($_GET["delete"] == "schema") {
-        $admin->deleteSchema($_GET["db"]);
-    }
-}
-
-$data = $admin->database($_GET['db']);
-$default = CSVConfig::default();
-$headers = $data->csvdb()->headers();
-$config = $data->csvdb()->config;
+$config = CSVConfig::default();
 ?>
-<script src="script/database/configuration.js"></script>
-<div class="d-flex">
-    <div class="w-50">
-        <h2>Konfiguration: <?= $_GET["db"] ?></h2>
+<div class="row g-3 align-items-center pb-3">
+  <div class="col-auto">
+    <label for="database_name" class="col-form-label">Datenbank Name</label>
+  </div>
+  <div class="col-auto">
+    <input type="text" id="database_name" class="form-control" aria-describedby="database_name">
+  </div>
 
-        <form name="config" method="post">
-            <div class="card mb-3 w-fit-content">
-                <div class="card-header">
-                    <?= $data->hasConfig() ? $data->configFile() : 'keine Konfiguration; default Werte' ?>
+  <div class="col-auto">
+    <label for="add_columns" class="col-form-label">Add</label>
+  </div>
+  <div class="col-auto">
+    <input type="number" id="add_columns" class="form-control" aria-describedby="add_columns">
+  </div>
+  <div class="col-auto">
+    column(s)
+  </div>
+
+  <div class="col-auto">
+    <button type="button" class="btn btn-light">Go</button>
+  </div>
+</div>
+
+<table class="table table-light table-striped align-middle my-3 insertRowTable w-auto">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Typ (?)</th>
+            <th>Standardwert</th>
+            <th>NULL</th>
+            <th>Index</th>
+            <th><abbr title="Auto Increment">AI</abbr></th>
+            <th>Kommentar</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="noclick">
+            <td class="text-center">
+                <input type="text" name="name" class="form-control"/>
+            </td>
+            <td class="text-center">
+                <select id="encoding" name="type" class="form-select">
+                    <option></option>
+                    <?php
+                        foreach (DatatypeEnum::getConstants() as $type) {
+                            $selected = "";
+                            /*if (strtolower($encoding) == strtolower($config->encoding)) {
+                                $selected = 'selected="selected"';
+                            }*/
+                            echo '<option value="' . $type . '" ' . $selected . '>' . $type . '</option>';
+                        }
+                    ?>
+                </select>                
+            </td>
+            <td class="text-center">
+                <input type="text" name="default" class="form-control"/>
+            </td>
+            <td class="text-center">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="true" name="null_value" id="null_value">
                 </div>
-                <div class="table-responsive-lg">
+            </td>
+            <td class="text-center">
+                <select id="encoding" name="index" class="form-select">
+                    <option></option>
+                    <option value="PRIMARY_KEY">PRIMARY KEY</option>
+                    <option value="UNIQUE">UNIQUE</option>
+                </select>
+            </td>
+            <td class="text-center">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="true" name="auto_increment" id="auto_increment">
+                </div>
+            </td>
+            <td class="text-center">
+                <input type="text" name="comment" class="form-control"/>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- config -->
+<div class="table-responsive-lg">
                     <table class="table table-light table-striped align-middle my-3 insertRowTable w-auto">
                         <thead>
                         <tr>
@@ -45,27 +97,6 @@ $config = $data->csvdb()->config;
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="noclick">
-                            <td class="text-center">
-                                index
-                            </td>
-                            <td class="text-center text-nowrap">
-                                <span class="column_type fst-italic" dir="ltr"><?= $default->index ?></span>
-                            </td>
-                            <td>
-                                <select id="index" name="index" class="form-select">
-                                    <?php
-                                    foreach ($headers as $index => $header) {
-                                        $selected = "";
-                                        if ($index == $config->index) {
-                                            $selected = 'selected="selected"';
-                                        }
-                                        echo '<option value="' . $index . '" ' . $selected . '>' . $header . '</option>';
-                                    }
-                                    ?>
-                                </select>
-                            </td>
-                        </tr>
                         <tr class="noclick">
                             <td class="text-center">
                                 encoding
@@ -170,67 +201,7 @@ $config = $data->csvdb()->config;
                         </tbody>
                     </table>
                 </div>
-                <div class="card-footer d-flex">
-                    <div>
-                        <?php
-                        $disabled_config = "";
-                        if (!$data->hasConfig()) {
-                            $disabled_config = 'disabled="disabled"';
-                        }
-                        ?>
-                        <button class="btn btn-warning ms-1 requireConfirm" type="button" id="button_delete_config"
-                                data-route="index.php?route=/database/configuration&db=<?= $_GET["db"] ?>&delete=config" <?= $disabled_config ?>>
-                            Löschen
-                        </button>
-                    </div>
-                    <div class="text-end flex-grow-1">
-                        <input type="hidden" name="action" value="config"/>
-                        <button class="btn btn-secondary ms-1" type="reset" id="button_reset_config">Zurücksetzen
-                        </button>
-                        <button class="btn btn-primary ms-1" type="submit" id="button_submit_config">OK</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
 
-    <div class="w-50">
-        <h2>Schema: <?= $_GET["db"] ?></h2>
-
-        <form name="schema" method="post">
-            <div class="card mb-3">
-                <div class="card-header">
-                    <?= $data->hasSchema() ? $data->schemaFile() : 'Kein Schema; default Werte' ?>
-                </div>
-                <div>
-                    <div id="editor" class="editor"><?= json_encode($data->csvdb()->getSchema(), JSON_PRETTY_PRINT) ?></div>
-                    <textarea class="hide" name="schema" id="schema"><?= json_encode($data->csvdb()->getSchema(), JSON_PRETTY_PRINT) ?></textarea>
-                </div>
-                <div class="card-footer d-flex">
-                    <div>
-                        <?php
-                            $disabled_schema = "";
-                            if (!$data->hasSchema()) {
-                                $disabled_schema = 'disabled="disabled"';
-                            }
-                        ?>
-                        <button class="btn btn-warning ms-1 requireConfirm" type="button" id="button_delete_schema"
-                                data-route="index.php?route=/database/configuration&db=<?= $_GET["db"] ?>&delete=schema" <?= $disabled_schema ?>>
-                            Löschen
-                        </button>
-                    </div>
-                    <div class="text-end flex-grow-1">
-                        <input type="hidden" name="action" value="schema"/>
-                        <button class="btn btn-secondary ms-1" type="reset" id="button_reset_schema">Zurücksetzen
-                        </button>
-                        <button class="btn btn-primary ms-1" type="submit" id="button_submit_schema">OK</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div id="delete_file" title="Fortfahren" class="hide">
-    <p>Wirklich löschen?</p>
+<div class="card-footer">
+    <input class="btn btn-primary" type="submit" name="submit" value="Speichern">
 </div>

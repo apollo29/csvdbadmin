@@ -4,6 +4,7 @@ use CSVDBAdmin\CSVDBAdmin;
 
 require_once '../vendor/autoload.php';
 
+// todo .env for directory of all csv...
 $admin = new CSVDBAdmin(__DIR__);
 $route = $admin->get_route($_GET);
 $db = $admin->get_database($_GET);
@@ -86,12 +87,12 @@ $db = $admin->get_database($_GET);
                             </div>
 
                             <div class="block second">
-                                <a href="index.php?route=/server/databases"><img src="themes/dot.gif" title="Neu"
+                                <a href="index.php?route=/server/create"><img src="themes/dot.gif" title="Neu"
                                                                                  alt="Neu"
                                                                                  class="icon ic_b_newdb"></a>
                             </div>
 
-                            <a class="hover_show_full" href="index.php?route=/server/databases" title="Neu">Neu</a>
+                            <a class="hover_show_full" href="index.php?route=/server/create" title="Neu">Neu</a>
 
                             <div class="clearfloat"></div>
                         </li>
@@ -187,6 +188,7 @@ $db = $admin->get_database($_GET);
                     case "/database/search":
                     case "/database/sql":
                     case "/database/structure":
+                    case "/server/create":
                     case "/server/export":
                     case "/server/import":
                     case "/server/sql":
