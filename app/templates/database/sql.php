@@ -5,66 +5,58 @@ use League\Csv\InvalidArgument;
 $db = $admin->get_database($_GET);
 $data = $admin->database($db);
 
-// todo sql syntax checker und highlighter --> ACE
-
 $sql_query = "SELECT * FROM " . $_GET["db"];
 if (!empty($_GET["sql_query"])) {
     $sql_query = $_GET["sql_query"];
 }
 ?>
-<script src="https://cdn.jsdelivr.net/npm/@rechat/squel@5.15.1/dist/squel.min.js"></script>
 <script src="https://unpkg.com/node-sql-parser/umd/mysql.umd.js"></script>
-<script src="script/database/sql.js"></script>
 <script>
 $(document).ready(function () {
-    var query = "<?= $sql_query ?>";
-    
+    const aceEditor = ace.edit("editor");
+    aceEditor.session.setMode("ace/mode/csvdb");
+    const textarea = $('textarea[name="sql_query"]');
+    aceEditor.session.on("change", function () {
+        textarea.val(aceEditor.session.getValue());
+    });
+
+    const query = "<?= $sql_query ?>";    
     const parser = new NodeSQLParser.Parser();
     const ast = parser.astify(query);
-    console.log(ast);
-    const sql = parser.sqlify(ast);
-    console.log(sql);
-
-    $("#parse_sql_query").val(sql);
-
-    
-    console.log(ast.columns.length);
-    console.log(ast.columns[0].expr.column);
 
     $("#columns").on('change', function() {
-        console.log($(this).val());
 
-        var test=[];
+        var cols=[];
         $(this).val().forEach((element) => {
-            // has * only
-            if (ast.columns.length===1 && ast.columns[0].expr.column) {
-                $("#columns").each(function(){
-                    test.push(
-                        { "expr":{
-                                "type":"column_ref",
-                                "table":null,
-                                "column":element
-                            },
-                            "as":null
-                        });
-                });
-            }
+            $("#columns").each(function(){
+                cols.push(
+                    { "expr":{
+                            "type":"column_ref",
+                            "table":null,
+                            "column":element
+                        },
+                        "as":null
+                    });
+            });
         });      
 
-        console.log(test);
-        ast.columns = test;
+        console.log(cols);
+        ast.columns = cols;
         
-        const sql = parser.sqlify(ast);
-        console.log(sql);
+        let sql = parser.sqlify(ast);
+        
+        // todo csvdb #10
+        sql = sql.replaceAll('`', '');
 
-        $("#parse_sql_query").val(sql);
+        $("#sql_query").val(sql);
+        aceEditor.setValue(sql);
     });
 
 });
 </script>
 
 <form method="get" name="sqlQuery" id="sqlQuery">
-    <input type="hidden" name="route" value="/database/sql">
+    <input type="hidden" name="route" value="/database/list">
     <input type="hidden" name="db" value="<?= $db ?>">
 
     <div class="card mb-3">
@@ -87,9 +79,6 @@ $(document).ready(function () {
                     echo "</select>";
                 ?>
             </div>
-        </div>
-        <div>
-            <textarea name="parse_sql_query" id="parse_sql_query" class="form-control"></textarea>
         </div>
         <div class="card-footer">
             <input class="btn btn-primary ms-1" type="submit" id="button_submit_query" name="SQL" tabindex="200" value="OK">
