@@ -13,7 +13,8 @@
     "vlucas/phpdotenv": "^4.1",
     "ext-mbstring": "*",
     "ext-json": "*",
-    "greenlion/php-sql-parser": "^4.6"
+    "greenlion/php-sql-parser": "^4.6",
+    "nilportugues/sql-query-builder": "^1.8"
   },
   "license": "MIT",
   "authors": [
