@@ -44,7 +44,7 @@ $(document).ready(function () {
         ast.columns = cols;
         
         let sql = parser.sqlify(ast);
-        
+
         // todo csvdb #10
         sql = sql.replaceAll('`', '');
 
@@ -86,6 +86,7 @@ $(document).ready(function () {
     </div>
 </form>
 
+<!-- todo syntax checker -->
 <div id="sqlqueryresultsouter">
     <div class="alert alert-danger" role="alert">
         <h3>Fehler</h3>
