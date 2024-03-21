@@ -93,6 +93,7 @@ a.disabled {
 
 .pma_table {
     max-width: 100%;
+    width: auto;
 }
 
 .pma_table .ellipsis {
