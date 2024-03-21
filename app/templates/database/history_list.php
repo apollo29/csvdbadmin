@@ -1,16 +1,18 @@
 <?php
 
 use CSVDB\CSVDB;
+use CSVDB\Helpers\CSVUtilities;
 
 $db = $admin->database($_GET['db']);
 try {
     $config = $db->csvdb()->config;
+    $config->history = false;
 } catch (Exception $e) {
     var_dump($e);
 }
 $filename = $_GET["history"];
 $csvdb = $db->csvdb()->history_dir() . $filename;
-$db = \CSVDB\Helpers\CSVUtilities::csv_database($csvdb);
+$db = CSVUtilities::csv_database($csvdb);
 try {
     $data = new CSVDB($csvdb, $config);
 } catch (Exception $e) {
