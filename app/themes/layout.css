@@ -2,10 +2,13 @@
 body {
     font-family: Inter, sans-serif;
     font-feature-settings: 'liga' 1, 'calt' 1; /* fix for Chrome */
-  }
-  @supports (font-variation-settings: normal) {
-    :root { font-family: InterVariable, sans-serif; }
-  }
+}
+
+@supports (font-variation-settings: normal) {
+    :root {
+        font-family: InterVariable, sans-serif;
+    }
+}
 
 #pma_navigation_content,
 #pma_navigation {
@@ -86,4 +89,15 @@ a.disabled {
 
 .order_none.sorticon::after {
     opacity: 0.0;
+}
+
+.pma_table {
+    max-width: 100%;
+}
+
+.pma_table .ellipsis {
+    max-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

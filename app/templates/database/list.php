@@ -147,7 +147,7 @@ include "list_navigation.php";
     <input type="hidden" name="index" value="<?= $data->csvdb()->index ?>">
 
     <div class="table-responsive-md">
-        <table class="table table-light table-striped table-hover table-sm table_results ajax w-auto pma_table">
+        <table class="table table-light table-striped table-hover table-sm table_results ajax pma_table">
             <thead class="table-light">
             <tr>
                 <th class="column_action position-sticky d-print-none" colspan="4"></th>
@@ -161,7 +161,7 @@ include "list_navigation.php";
                 foreach ($headers as $header) {
                     $order_direction = "ASC";
                     $order_direction_class = "order_none";
-                    if ($_GET["order"]==$header) {
+                    if (@$_GET["order"]==$header) {
                         $order_direction_class = "order_desc";
                         if ($_GET["order_direction"]=="ASC") {
                             $order_direction = "DESC";
@@ -220,7 +220,7 @@ include "list_navigation.php";
                     </td>
                     <?php
                     foreach ($item as $field) {
-                        echo '<td class="text data grid_edit click2 not_null text-nowrap"><span>' . $field . '</span></td>' . "\n";
+                        echo '<td class="text data grid_edit click2 not_null text-nowrap ellipsis"><span>' . $field . '</span></td>' . "\n";
                     }
                     ?>
                 </tr>

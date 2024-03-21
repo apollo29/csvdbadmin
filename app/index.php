@@ -13,8 +13,9 @@ $db = $admin->get_database($_GET);
 <head>
     <title>CSVDBAdmin</title>
     
-    <!-- todo BASE TAG -->
+    <!-- todo BASE TAG
     <base href="/app/" />
+    -->
 
     <script
             src="https://code.jquery.com/jquery-3.6.3.min.js"

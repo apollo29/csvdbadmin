@@ -1,6 +1,23 @@
+<?php
+if ($_POST) {
+    var_dump($_POST);
+    var_dump($_FILES);
+
+    $row=0;
+    if (($handle = fopen($_FILES['import_file']['tmp_name'], "r")) !== FALSE) {
+        while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+            $num = count($data);
+            echo "<p> $num Felder in Zeile $row: <br /></p>\n";
+            $row++;
+            for ($c=0; $c < $num; $c++) {
+                echo $data[$c] . "<br />\n";
+            }
+        }
+        fclose($handle);
+    }
+}
+?>
 <h2>In den aktuell ausgewählten Server importieren</h2>
-
-
 <form name="import_database" method="post" enctype="multipart/form-data">
     <div class="importoptions">
         <h3>Zu importierende Datei:</h3>
@@ -15,7 +32,7 @@
 
         <div class="formelementrow" id="upload_form">
             <label for="input_import_file">Durchsuchen Sie Ihren Computer:</label>
-            <input type="file" accept=".csv" name="import_file" id="input_import_file">(Maximal: 40MiB)
+            <input type="file" accept=".csv" name="import_file" id="input_import_file">(Maximal: 40MB)
             <input type="hidden" name="MAX_FILE_SIZE" value="41943040">
         </div>
 
